@@ -64,6 +64,6 @@ export const TopPartInfoBox = styled.div`
   justify-content: center;
   align-items: center;
 
-  font-family: ${({ theme }) => theme.fonts.nunito};
+  font-family: ${({ theme }) => theme.fonts.default};
   color: #111;
 `

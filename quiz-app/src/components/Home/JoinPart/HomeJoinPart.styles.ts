@@ -62,7 +62,7 @@ export const WarningBox = styled.div`
   border-radius: 10px;
   padding: 0 5px;
 
-  font-family: ${({ theme }) => theme.fonts.nunito};
+  font-family: ${({ theme }) => theme.fonts.default};
   font-weight: bold;
   color: #eee;
 

@@ -8,7 +8,7 @@ export const JoinPartFormWrapper = styled.form`
 
     h1 {
       font-size: 34px;
-      font-family: ${({ theme }) => theme.fonts.nunito};
+      font-family: ${({ theme }) => theme.fonts.default};
       margin: 0;
       margin-bottom: 25px;
     }
@@ -21,7 +21,7 @@ export const JoinPartFormWrapper = styled.form`
       border-radius: 10px;
       margin-bottom: 20px;
 
-      font-family: ${({ theme }) => theme.fonts.nunito};
+      font-family: ${({ theme }) => theme.fonts.default};
       text-align: center;
       font-size: 18px;
     }
@@ -36,7 +36,7 @@ export const JoinPartFormWrapper = styled.form`
       border-radius: 10px;
 
       font-size: 20px;
-      font-family: ${({ theme }) => theme.fonts.nunito};
+      font-family: ${({ theme }) => theme.fonts.default};
       font-weight: bold;
       color: #eee;
     }
@@ -48,7 +48,7 @@ export const JoinPartFormWrapper = styled.form`
   align-items: center;
 
   h1 {
-    font-family: ${({ theme }) => theme.fonts.nunito};
+    font-family: ${({ theme }) => theme.fonts.default};
   }
 `
 
@@ -64,7 +64,7 @@ export const ClassChoice = styled.div`
     align-items: center;
 
     font-size: 20px;
-    font-family: ${({ theme }) => theme.fonts.nunito};
+    font-family: ${({ theme }) => theme.fonts.default};
     font-weight: bold;
 
     .option {

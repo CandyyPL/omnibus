@@ -51,7 +51,7 @@ export const Footer = styled.div`
   display: flex;
   align-items: center;
 
-  font-family: ${({ theme }) => theme.fonts.nunito};
+  font-family: ${({ theme }) => theme.fonts.default};
   font-weight: bold;
   color: #eee;
 `
