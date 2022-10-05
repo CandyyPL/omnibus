@@ -56,6 +56,12 @@ export const WarningBox = styled.div`
     font-size: 18px;
   }
 
+  @media only screen and (min-width: 600px) {
+    span {
+      font-size: 22px;
+    }
+  }
+
   background-color: red;
 
   border: none;
@@ -71,6 +77,10 @@ export const WarningBox = styled.div`
   align-items: center;
 
   span {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
   }
 `

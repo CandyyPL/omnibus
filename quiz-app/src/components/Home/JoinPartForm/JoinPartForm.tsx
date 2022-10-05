@@ -2,9 +2,20 @@ import {
   ClassChoice,
   JoinPartFormWrapper,
 } from '@/components/Home/JoinPartForm/JoinPartForm.styles'
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 
 const JoinPartForm: FC = () => {
+  useEffect(() => {
+    const viewHeight = window.innerHeight
+    const viewWidth = window.innerWidth
+    const viewport = document.querySelector('meta[name=viewport]')!
+
+    viewport.setAttribute(
+      'content',
+      'height=' + viewHeight + 'px, width=' + viewWidth + 'px, initial-scale=1'
+    )
+  }, [])
+
   return (
     <JoinPartFormWrapper>
       <h1>Zapisz się</h1>
