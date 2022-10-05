@@ -6,14 +6,22 @@ export const HomeFooterPartWrapper = styled.div`
   @media only screen and (min-width: 360px) and (max-width: 720px) {
     height: 20vh;
   }
+
+  @media only screen and (min-width: 720px) {
+    height: 100px;
+  }
 `
 
 export const Quote = styled.div`
-  @media only screen and (min-width: 360px) and (max-width: 720px) {
-    width: 90%;
-    height: 45%;
+  width: 90%;
+  height: 45%;
 
+  @media only screen and (min-width: 360px) and (max-width: 720px) {
     font-size: 20px;
+  }
+
+  @media only screen and (min-width: 720px) {
+    font-size: 32px;
   }
 
   margin: 20px auto;
@@ -29,21 +37,38 @@ export const Quote = styled.div`
 
 export const Footer = styled.div`
   width: 100%;
+  height: 55%;
 
   @media only screen and (min-width: 360px) and (max-width: 720px) {
-    height: 55%;
-
     flex-direction: column;
     justify-content: center;
 
     .title {
       font-size: 22px;
-      letter-spacing: 2px;
     }
 
     .subtitle {
       font-size: 14px;
     }
+  }
+
+  @media only screen and (min-width: 720px) {
+    flex-direction: row;
+    justify-content: space-between;
+
+    padding: 20px;
+
+    .title {
+      font-size: 26px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+    }
+  }
+
+  .title {
+    letter-spacing: 2px;
   }
 
   background-color: #222;
