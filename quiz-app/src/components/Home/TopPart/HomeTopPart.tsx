@@ -10,8 +10,15 @@ const HomeTopPart: FC = () => {
         <img src={studentImg} alt='student' />
       </div>
       <div className='large-width'>
-        <img src={studentImg} alt='student' />
-        <InfoBox />
+        <div className='join-motto'>
+          <span>
+            NIE CZEKAJ, <button>DOŁĄCZ</button> JUŻ TERAZ
+          </span>
+        </div>
+        <div className='lower-content'>
+          <img src={studentImg} alt='student' />
+          <InfoBox />
+        </div>
       </div>
     </HomeTopPartWrapper>
   )
