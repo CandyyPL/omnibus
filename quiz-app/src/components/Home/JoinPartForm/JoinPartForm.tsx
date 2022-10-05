@@ -1,5 +1,6 @@
 import {
   ClassChoice,
+  ClassOption,
   JoinPartFormWrapper,
 } from '@/components/Home/JoinPartForm/JoinPartForm.styles'
 import { FC, useEffect } from 'react'
@@ -23,10 +24,10 @@ const JoinPartForm: FC = () => {
       <input type='text' placeholder='Adres e-mail' />
       <ClassChoice>
         <span>Klasa: </span>
-        <div className='option'>1</div>
-        <div className='option'>2</div>
-        <div className='option'>3</div>
-        <div className='option'>4</div>
+        <ClassOption>1</ClassOption>
+        <ClassOption>2</ClassOption>
+        <ClassOption>3</ClassOption>
+        <ClassOption>4</ClassOption>
         {/* <div className='classOption'>5</div> */}
       </ClassChoice>
       <button type='submit'>WYŚLIJ ZGŁOSZENIE</button>
