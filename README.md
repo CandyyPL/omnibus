@@ -1,1 +1,2 @@
-# Omnibus | School Contest Platform
+# Omnibus | School Quiz Platform
+

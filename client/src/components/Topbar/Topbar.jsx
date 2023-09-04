@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import busImg from '@/assets/img/bus.png'
 import susImg from '@/assets/img/sus_color.png'
-import { TopbarWrapper } from '@/components/Topbar/Topbar.styles.js'
+import './Topbar.scss'
 
 const Topbar = () => {
   const easterEggLetter = useRef(null)
@@ -27,7 +27,7 @@ const Topbar = () => {
   }
 
   return (
-    <TopbarWrapper>
+    <div className='topbar-wrapper'>
       <div className='title'>
         <img src={titleImg} className='left' />
         <span className='text'>
@@ -39,7 +39,7 @@ const Topbar = () => {
         <button className='reg'>Zarejestruj się</button>
         <button className='log'>Zaloguj się</button>
       </div>
-    </TopbarWrapper>
+    </div>
   )
 }
 

@@ -1,12 +1,12 @@
-import { Content, WelcomeWrapper } from '@/views/Welcome/Welcome.styles.js'
 import mainSchoolBusImg from '@/assets/img/main_school_bus.png'
 import Topbar from '@/components/Topbar/Topbar.jsx'
+import './Welcome.scss'
 
 const Welcome = () => {
   return (
-    <WelcomeWrapper>
+    <div className='welcome-wrapper'>
       <Topbar />
-      <Content>
+      <div className='content'>
         <div className='bus-img'>
           <img src={mainSchoolBusImg} />
         </div>
@@ -46,8 +46,8 @@ const Welcome = () => {
           </section>
         </div>
         <footer></footer>
-      </Content>
-    </WelcomeWrapper>
+      </div>
+    </div>
   )
 }
 
