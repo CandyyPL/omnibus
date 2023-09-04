@@ -24,9 +24,9 @@
 
     .text {
       font-size: 40px;
-      font-family: vars.fonts.$montalt;
+      font-family: fonts.$montalt;
       font-weight: bold;
-      color: vars.colors.$dark;
+      color: colors.$dark;
 
       cursor: default;
     }
@@ -69,9 +69,9 @@
       border-radius: 4px;
 
       font-size: 20px;
-      font-family: vars.fonts.$nunito;
+      font-family: fonts.$nunito;
       font-weight: bold;
-      color: vars.colors.$light;
+      color: colors.$light;
 
       cursor: pointer;
 
