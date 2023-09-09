@@ -8,8 +8,7 @@
   align-items: center;
 }
 
-.content {
-  width: 100%;
+.welcome-content {
   height: calc(300vh - 100px);
 
   background-color: colors.$light;
@@ -119,4 +118,3 @@
     background-color: #2ca87f;
   }
 }
-

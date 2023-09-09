@@ -1,47 +1,68 @@
 import { useEffect, useState } from 'react'
-import './Quiz.scss'
 import { getData } from '@/supa/db'
+import './Quiz.scss'
 
 const Quiz = () => {
-  const [currentQuizData, setCurrentQuizData] = useState([])
   const [currentQuizSubject, setCurrentQuizSubject] = useState('q_math')
+
+  const [quizData, setQuizData] = useState([])
+  const [currentQuizData, setCurrentQuizData] = useState([])
+  const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0)
+
+  const [quizEnd, setQuizEnd] = useState(false)
+  const [points, setPoints] = useState(0)
 
   useEffect(() => {
     ;(async () => {
       const data = await getData(currentQuizSubject, '*')
 
       if (data) {
-        setCurrentQuizData(data)
+        setQuizData(data)
+        setCurrentQuizData(data[currentQuestionIdx])
       }
     })()
   }, [])
 
-  const answer = (qd, idx) => {
-    if (idx == qd.correctIdx) {
-      console.log('correct')
+  const answer = (idx) => {
+    if (idx == currentQuizData.correctIdx) {
+      setPoints((prev) => prev + 1)
+    }
+
+    if (currentQuestionIdx + 1 == quizData.length) {
+      setQuizEnd(true)
+    } else if (currentQuestionIdx + 1 < quizData.length) {
+      setCurrentQuestionIdx((prev) => prev + 1)
     }
   }
 
+  useEffect(() => {
+    setCurrentQuizData(quizData[currentQuestionIdx])
+  }, [currentQuestionIdx])
+
   return (
     <>
-      {currentQuizData ? (
+      {currentQuizData && currentQuizData.answers ? (
         <div className='quiz-wrapper'>
-          <div className='content'>
-            {currentQuizData.map((qd) => (
-              <div className='question-wrapper' key={qd.id}>
-                <div className='question'>{qd.question}</div>
+          <div className='quiz-content'>
+            {quizEnd ? (
+              <div className='final'>
+                QUIZ END! YOUR SCORE: {points} / {quizData.length}
+              </div>
+            ) : (
+              <div className='question-wrapper'>
+                <div className='question'>{currentQuizData.question}</div>
                 <div className='answers'>
-                  {qd.answers.map((a) => (
+                  {currentQuizData.answers.map((a) => (
                     <button
                       className='answer'
-                      onClick={() => answer(qd.answers.indexOf(qd, a))}
+                      onClick={() => answer(currentQuizData.answers.indexOf(a))}
                       key={a}>
                       {a}
                     </button>
                   ))}
                 </div>
               </div>
-            ))}
+            )}
           </div>
         </div>
       ) : (

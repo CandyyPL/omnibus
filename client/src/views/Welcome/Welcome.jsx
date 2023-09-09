@@ -6,7 +6,7 @@ const Welcome = () => {
   return (
     <div className='welcome-wrapper'>
       <Topbar />
-      <div className='content'>
+      <div className='welcome-content'>
         <div className='bus-img'>
           <img src={mainSchoolBusImg} />
         </div>
