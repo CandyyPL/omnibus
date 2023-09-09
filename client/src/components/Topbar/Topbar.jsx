@@ -1,7 +1,8 @@
+import './Topbar.scss'
 import { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import busImg from '@/assets/img/bus.png'
 import susImg from '@/assets/img/sus_color.png'
-import './Topbar.scss'
 
 const Topbar = () => {
   const easterEggLetter = useRef(null)
@@ -26,6 +27,8 @@ const Topbar = () => {
     }
   }
 
+  const navigate = useNavigate()
+
   return (
     <div className='topbar-wrapper'>
       <div className='title'>
@@ -36,8 +39,12 @@ const Topbar = () => {
         <img src={titleImg} className='right' />
       </div>
       <div className='buttons'>
-        <button className='reg'>Zarejestruj się</button>
-        <button className='log'>Zaloguj się</button>
+        <button className='reg' onClick={() => navigate('/register')}>
+          Zarejestruj się
+        </button>
+        <button className='log' onClick={() => navigate('/login')}>
+          Zaloguj się
+        </button>
       </div>
     </div>
   )

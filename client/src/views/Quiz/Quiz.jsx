@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getData } from '@/supa/db'
+import { getData } from '@/supa/dbFunctions'
 import './Quiz.scss'
 
 const Quiz = () => {
