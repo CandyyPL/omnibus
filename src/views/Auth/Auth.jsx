@@ -1,9 +1,11 @@
 import './Auth.scss'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useContext } from 'react'
 import { supabase } from '@/supa/client'
-import { AuthContext } from '@/providers/AuthProvider'
-import { postData } from '@/supa/dbFunctions'
 import { useNavigate } from 'react-router-dom'
+import { AuthContext } from '@/providers/AuthProvider'
+
+const BASE_URL = 'http://localhost:5173'
+const DONE_REDIRECT = '/dashboard'
 
 const Auth = ({ type }) => {
   const usernameRef = useRef(null)
@@ -13,12 +15,13 @@ const Auth = ({ type }) => {
 
   const [error, setError] = useState(null)
 
-  const { user, setUser } = useContext(AuthContext)
+  const { session } = useContext(AuthContext)
 
   const navigate = useNavigate()
 
   const auth = async () => {
     if (type === 'register') {
+      const username = usernameRef.current.value
       const email = emailRef.current.value
       const password = passwordRef.current.value
       const passwordRepeat = passwordRepeatRef.current.value
@@ -28,10 +31,16 @@ const Auth = ({ type }) => {
       const { error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            username,
+          },
+          emailRedirectTo: `${BASE_URL}${DONE_REDIRECT}`,
+        },
       })
 
       if (error) setError(error)
-      else navigate('/quiz')
+      else navigate(DONE_REDIRECT)
     } else if (type === 'login') {
       const email = emailRef.current.value
       const password = passwordRef.current.value
@@ -42,6 +51,7 @@ const Auth = ({ type }) => {
       })
 
       if (error) setError(error)
+      else navigate(DONE_REDIRECT)
     }
   }
 
@@ -52,13 +62,6 @@ const Auth = ({ type }) => {
   }
 
   useEffect(() => {
-    if (user) {
-      const username = usernameRef.current.value
-      postData('users', [{ uid: user.id, username }])
-    }
-  }, [user])
-
-  useEffect(() => {
     if (error) {
       alert(error)
     }
@@ -66,7 +69,7 @@ const Auth = ({ type }) => {
 
   return (
     <div className='auth-wrapper'>
-      <button onClick={() => logout()}>WYLOGUJ</button>
+      {session?.user && <button onClick={() => logout()}>WYLOGUJ</button>}
       <div className='form'>
         {type === 'register' ? (
           <input type='text' placeholder='Nazwa użytkownika' ref={usernameRef} />

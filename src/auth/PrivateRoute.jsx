@@ -1,18 +1,11 @@
-import { supabase } from '@/supa/client'
-import { useEffect, useState } from 'react'
+import { AuthContext } from '@/providers/AuthProvider'
+import { useContext } from 'react'
 import { Navigate } from 'react-router-dom'
 
 const PrivateRoute = ({ children }) => {
-  const [user, setUser] = useState(null)
+  const { session } = useContext(AuthContext)
 
-  useEffect(() => {
-    ;(async () => {
-      const user = await supabase.auth.getSession()
-      if (user) setUser(user)
-    })()
-  }, [])
-
-  if (user) {
+  if (session?.user) {
     return children
   } else {
     return <Navigate to='/' replace={true} />

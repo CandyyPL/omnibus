@@ -1,8 +1,9 @@
 import './Topbar.scss'
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import busImg from '@/assets/img/bus.png'
 import susImg from '@/assets/img/sus_color.png'
+import { AuthContext } from '@/providers/AuthProvider'
 
 const Topbar = () => {
   const easterEggLetter = useRef(null)
@@ -27,6 +28,8 @@ const Topbar = () => {
     }
   }
 
+  const { session } = useContext(AuthContext)
+
   const navigate = useNavigate()
 
   return (
@@ -39,12 +42,20 @@ const Topbar = () => {
         <img src={titleImg} className='right' />
       </div>
       <div className='buttons'>
-        <button className='reg' onClick={() => navigate('/register')}>
-          Zarejestruj się
-        </button>
-        <button className='log' onClick={() => navigate('/login')}>
-          Zaloguj się
-        </button>
+        {session?.user ? null : (
+          <button className='reg' onClick={() => navigate('/register')}>
+            Zarejestruj się
+          </button>
+        )}
+        {session?.user ? (
+          <button className='dshb' onClick={() => navigate('/dashboard')}>
+            Dashboard
+          </button>
+        ) : (
+          <button className='log' onClick={() => navigate('/login')}>
+            Zaloguj się
+          </button>
+        )}
       </div>
     </div>
   )

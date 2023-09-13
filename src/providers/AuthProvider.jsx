@@ -4,29 +4,28 @@ import { createContext, useEffect, useState } from 'react'
 export const AuthContext = createContext({})
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null)
+  const [session, setSession] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    ;(async () => {
-      const session = await supabase.auth.getSession()
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session ?? null)
+    })
 
-      setUser(session?.user ?? null)
-      setLoading(false)
-    })()
-
-    const { data: listener } = supabase.auth.onAuthStateChange(async (event, session) => {
-      setUser(session?.user ?? null)
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      setSession(session ?? null)
       setLoading(false)
     })
 
     return () => {
-      listener.subscription.unsubscribe()
+      subscription.unsubscribe()
     }
   }, [])
 
   const provide = {
-    user,
+    session,
     signIn: (data) => supabase.auth.signInWithPassword(data),
     signUp: (data) => supabase.auth.signUp(data),
     signOut: () => supabase.auth.signOut(),

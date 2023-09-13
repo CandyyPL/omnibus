@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Welcome from '@/views/Welcome/Welcome'
-import Quiz from '@/views/Quiz/Quiz'
 import PrivateRoute from '@/auth/PrivateRoute'
 import Auth from '@/views/Auth/Auth'
+import Dashboard from '@/views/Dashboard/Dashboard'
 
 const App = () => {
   return (
@@ -12,10 +12,10 @@ const App = () => {
         <Route path='/register' element={<Auth type='register' />} />
         <Route path='/login' element={<Auth type='login' />} />
         <Route
-          path='/quiz'
+          path='/dashboard'
           element={
             <PrivateRoute>
-              <Quiz />
+              <Dashboard />
             </PrivateRoute>
           }
         />
