@@ -1,6 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
 import './Auth.scss'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { supabase } from '@/supa/client'
+import { AuthContext } from '@/providers/AuthProvider'
+import { postData } from '@/supa/dbFunctions'
+import { useNavigate } from 'react-router-dom'
 
 const Auth = ({ type }) => {
   const usernameRef = useRef(null)
@@ -8,36 +11,37 @@ const Auth = ({ type }) => {
   const passwordRef = useRef(null)
   const passwordRepeatRef = useRef(null)
 
-  const [data, setData] = useState(null)
   const [error, setError] = useState(null)
+
+  const { user, setUser } = useContext(AuthContext)
+
+  const navigate = useNavigate()
 
   const auth = async () => {
     if (type === 'register') {
-      const username = usernameRef.current.value
       const email = emailRef.current.value
       const password = passwordRef.current.value
       const passwordRepeat = passwordRepeatRef.current.value
 
       if (password !== passwordRepeat) return
 
-      const { data, error } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email,
         password,
       })
 
       if (error) setError(error)
-      if (data) setData(data)
+      else navigate('/quiz')
     } else if (type === 'login') {
       const email = emailRef.current.value
       const password = passwordRef.current.value
 
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
 
       if (error) setError(error)
-      if (data) setData(data)
     }
   }
 
@@ -48,11 +52,16 @@ const Auth = ({ type }) => {
   }
 
   useEffect(() => {
-    console.log(data)
-  }, [data])
+    if (user) {
+      const username = usernameRef.current.value
+      postData('users', [{ uid: user.id, username }])
+    }
+  }, [user])
 
   useEffect(() => {
-    console.log(error)
+    if (error) {
+      alert(error)
+    }
   }, [error])
 
   return (
