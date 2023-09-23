@@ -3,6 +3,7 @@ import Welcome from '@/views/Welcome/Welcome'
 import PrivateRoute from '@/auth/PrivateRoute'
 import Auth from '@/views/Auth/Auth'
 import Dashboard from '@/views/Dashboard/Dashboard'
+import Quiz from '@/views/Quiz/Quiz'
 
 const App = () => {
   return (
@@ -16,6 +17,14 @@ const App = () => {
           element={
             <PrivateRoute>
               <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path='/quiz'
+          element={
+            <PrivateRoute>
+              <Quiz />
             </PrivateRoute>
           }
         />

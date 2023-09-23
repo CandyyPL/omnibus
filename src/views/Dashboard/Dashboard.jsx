@@ -1,6 +1,21 @@
+import { QuizDataContext } from '@/providers/QuizDataProvider'
 import './Dashboard.scss'
 import { AuthContext } from '@/providers/AuthProvider'
-import { useContext } from 'react'
+import { useQuery } from 'graphql-hooks'
+import { useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
+const CATEGORIES_QUERY = `query QuestionGroups {
+  allQuestiongroups {
+    id
+    groupid
+    group
+  }
+
+  _allQuestionsMeta {
+    count
+  }
+}`
 
 const Dashboard = () => {
   const {
@@ -8,10 +23,43 @@ const Dashboard = () => {
     signOut,
   } = useContext(AuthContext)
 
-  console.log(user)
+  const { setQuizCategory, setAvailQuestionCount } = useContext(QuizDataContext)
+
+  const navigate = useNavigate()
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const { loading, data, error } = useQuery(CATEGORIES_QUERY)
+
+  const [questionGroups, setQuestionGroups] = useState([])
+
+  useEffect(() => {
+    if (data) {
+      setQuestionGroups(data.allQuestiongroups)
+      setAvailQuestionCount(data._allQuestionsMeta.count)
+    }
+  }, [data])
+
+  const selectCategory = (c) => {
+    setQuizCategory({ cat: c.groupid, name: c.group })
+    navigate('/quiz')
+  }
 
   return (
     <div className='dashboard-wrapper'>
+      {isModalOpen && !loading && (
+        <div className='category-modal-bg'>
+          <div className='category-modal'>
+            <ul>
+              {questionGroups.map((c) => (
+                <button key={c.id} onClick={() => selectCategory(c)}>
+                  {c.group}
+                </button>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
       <div className='sidebar'>
         <div className='logo'>OMNIBUS</div>
         <ul className='main-links'>
@@ -40,7 +88,7 @@ const Dashboard = () => {
         </div>
         <div className='game-info'>
           <div className='game-buttons'>
-            <button>GRAJ</button>
+            <button onClick={() => setIsModalOpen(true)}>GRAJ</button>
             <button>HISTORIA GIER</button>
           </div>
           <div className='last-game-info'></div>
