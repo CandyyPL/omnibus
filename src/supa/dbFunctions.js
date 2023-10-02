@@ -5,7 +5,6 @@ export const getData = async (table, select) => {
   return data
 }
 
-export const postData = async (table, dataArr) => {
-  const { data } = await supabase.from(table).insert(dataArr)
-  console.log(`DATA ADDED ${data}`)
+export const postData = async (table, data) => {
+  await supabase.from(table).insert(data)
 }

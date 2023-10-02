@@ -4,6 +4,9 @@ import { AuthContext } from '@/providers/AuthProvider'
 import { useQuery } from 'graphql-hooks'
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { supabase } from '@/supa/client'
+
+const STORAGE_QUIZ_DATA_ID = 'current_quiz_data'
 
 const CATEGORIES_QUERY = `query QuestionGroups {
   allQuestiongroups {
@@ -27,11 +30,46 @@ const Dashboard = () => {
 
   const navigate = useNavigate()
 
-  const [isModalOpen, setIsModalOpen] = useState(false)
-
   const { loading, data, error } = useQuery(CATEGORIES_QUERY)
 
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [questionGroups, setQuestionGroups] = useState([])
+  const [username, setUsername] = useState(null)
+  const [rtChange, setRtChange] = useState(null)
+
+  useEffect(() => {
+    sessionStorage.removeItem(STORAGE_QUIZ_DATA_ID)
+    ;(async () => {
+      const { data } = await supabase.from('users').select('uid,username').eq('uid', user.id)
+
+      if (data == null || data.length == 0) {
+        await supabase
+          .from('users')
+          .insert([{ uid: user.id, username: user.user_metadata.username }])
+      } else {
+        setUsername(data[0].username)
+      }
+    })()
+  }, [])
+
+  // useEffect(() => {
+  //   supabase
+  //     .channel('any')
+  //     .on(
+  //       'postgres_changes',
+  //       { event: 'UPDATE', schema: 'public', table: 'users', filter: `uid=eq.${user.id}` },
+  //       (payload) => {
+  //         setRtChange(payload)
+  //       }
+  //     )
+  //     .subscribe()
+  // }, [])
+
+  // useEffect(() => {
+  //   if (rtChange) {
+  //     if (rtChange.new.username !== undefined) setUsername(rtChange.new.username)
+  //   }
+  // }, [rtChange])
 
   useEffect(() => {
     if (data) {
@@ -70,7 +108,7 @@ const Dashboard = () => {
         <button onClick={() => signOut()}>WYLOGUJ</button>
       </div>
       <div className='main-content'>
-        <div className='main-topbar'></div>
+        <div className='main-topbar'>USERNAME: {username}</div>
         <div className='user-info'>
           <div className='rank-info'>
             <div className='rank-img'></div>
