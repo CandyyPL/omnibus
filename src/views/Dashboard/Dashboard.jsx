@@ -1,7 +1,6 @@
-import { QuizDataContext } from '@/providers/QuizDataProvider'
 import './Dashboard.scss'
+import { QuizDataContext } from '@/providers/QuizDataProvider'
 import { AuthContext } from '@/providers/AuthProvider'
-import { useQuery } from 'graphql-hooks'
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/supa/client'

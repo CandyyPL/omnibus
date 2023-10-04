@@ -2,6 +2,7 @@ import './Quiz.scss'
 import { useContext, useEffect, useState } from 'react'
 import { QuizDataContext } from '@/providers/QuizDataProvider'
 import { supabase } from '@/supa/client'
+import QuizEnd from '@/views/Quiz/QuizEnd/QuizEnd'
 
 const STORAGE_QUIZ_DATA_ID = 'current_quiz_data'
 
@@ -17,7 +18,8 @@ const Quiz = () => {
   const [loading, setLoading] = useState(true)
 
   const [quizEnd, setQuizEnd] = useState(false)
-  const [points, setPoints] = useState(0)
+  const [score, setScore] = useState(0)
+  const [answers, setAnswers] = useState([])
 
   // Get specific amount of random ids
   const getRandomIds = () => {
@@ -35,15 +37,8 @@ const Quiz = () => {
 
   // Run first, check for data in storage or query questions
   useEffect(() => {
-    let qData = sessionStorage.getItem(STORAGE_QUIZ_DATA_ID)
-    if (qData === 'undefined' || !qData) {
-      let ids = getRandomIds()
-      setQuestionIds(ids)
-    } else {
-      let data = JSON.parse(sessionStorage.getItem(STORAGE_QUIZ_DATA_ID))
-      setCurrentQuizData(data)
-      console.log('loading questions')
-    }
+    let ids = getRandomIds()
+    setQuestionIds(ids)
   }, [])
 
   // On question ids ready, get questions
@@ -81,7 +76,10 @@ const Quiz = () => {
   // Answer
   const answer = (idx) => {
     if (idx == currentQuizData.correctIdx) {
-      setPoints((prev) => prev + 1)
+      setScore((prev) => prev + 1)
+      setAnswers((prev) => [...prev, { id: idx, correct: true }])
+    } else {
+      setAnswers((prev) => [...prev, { id: idx, correct: false }])
     }
 
     if (currentQuestionIdx + 1 == quizData.length) {
@@ -97,11 +95,7 @@ const Quiz = () => {
         <div className='quiz-wrapper'>
           <div className='quiz-content'>
             {quizEnd ? (
-              <div className='final'>
-                PODSUMOWANIE QUIZU <br />
-                {quizCategory.name} <br />
-                WYNIK: {points} / {quizData.length}
-              </div>
+              <QuizEnd quizData={quizData} answers={answers} score={score} />
             ) : (
               <div className='question-wrapper'>
                 <div className='question'>{currentQuizData.question}</div>
