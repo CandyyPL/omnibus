@@ -4,6 +4,7 @@ import PrivateRoute from '@/auth/PrivateRoute'
 import Auth from '@/views/Auth/Auth'
 import Dashboard from '@/views/Dashboard/Dashboard'
 import Quiz from '@/views/Quiz/Quiz'
+import QuestionManager from '@/views/QM/QuestionManager'
 
 const App = () => {
   return (
@@ -25,6 +26,14 @@ const App = () => {
           element={
             <PrivateRoute>
               <Quiz />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path='/qm'
+          element={
+            <PrivateRoute>
+              <QuestionManager />
             </PrivateRoute>
           }
         />

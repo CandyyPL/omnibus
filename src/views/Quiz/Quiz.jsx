@@ -1,24 +1,7 @@
 import './Quiz.scss'
 import { useContext, useEffect, useState } from 'react'
-import { useManualQuery } from 'graphql-hooks'
 import { QuizDataContext } from '@/providers/QuizDataProvider'
-
-const QUESTIONS_QUERY = `query Questions($questionIds: [String]!, $questionCategory: String!) {
-  allQuestions(filter: { questionid: { in: $questionIds }, questiongroup: { eq: $questionCategory } }) {
-    id
-    questionid
-    questiontitle
-    questionimage {
-      url
-    }
-    questionanswers {
-      answer
-      answerid
-    }
-    correctid
-    questiongroup
-  }
-}`
+import { supabase } from '@/supa/client'
 
 const STORAGE_QUIZ_DATA_ID = 'current_quiz_data'
 
@@ -27,13 +10,11 @@ const Quiz = () => {
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(null)
 
   const [quizData, setQuizData] = useState(null)
-  const { quizCategory, availQuestionCount } = useContext(QuizDataContext)
   const [questionIds, setQuestionIds] = useState(null)
 
-  const [loading, setLoading] = useState(true)
+  const { quizCategory, availQuestionCount } = useContext(QuizDataContext)
 
-  const [getQuestions, { loading: queryLoading, data: queryData, error: queryError }] =
-    useManualQuery(QUESTIONS_QUERY)
+  const [loading, setLoading] = useState(true)
 
   const [quizEnd, setQuizEnd] = useState(false)
   const [points, setPoints] = useState(0)
@@ -41,7 +22,7 @@ const Quiz = () => {
   // Get specific amount of random ids
   const getRandomIds = () => {
     let ids = []
-    let amount = 10
+    let amount = 2
 
     while (ids.length < amount) {
       let rand = Math.floor(Math.random() * availQuestionCount)
@@ -69,34 +50,23 @@ const Quiz = () => {
   useEffect(() => {
     if (questionIds) {
       ;(async () => {
-        console.log(questionIds)
-        await getQuestions({
-          variables: {
-            questionIds,
-            questionCategory: quizCategory.cat,
-          },
-        })
+        const { data } = await supabase
+          .from(quizCategory.cat)
+          .select('id,question,answers,correctIdx')
+          .in('id', questionIds)
+
+        if (data && data.length > 0) {
+          setQuizData(data)
+          setCurrentQuestionIdx(0)
+        }
       })()
     }
   }, [questionIds])
-
-  // On got questions, set states
-  useEffect(() => {
-    if (queryData) {
-      setQuizData(queryData.allQuestions)
-      console.log(queryData)
-      setCurrentQuestionIdx(0)
-      console.log('got questions')
-    }
-  }, [queryData])
 
   // On set quiz data, set current data
   useEffect(() => {
     if (!!quizData && quizData.length > 0 && currentQuestionIdx !== null) {
       setCurrentQuizData(quizData[currentQuestionIdx])
-      console.log('set curr question data')
-
-      console.log(quizData)
     }
   }, [quizData, currentQuestionIdx])
 
@@ -105,16 +75,12 @@ const Quiz = () => {
     if (currentQuizData !== null) {
       sessionStorage.setItem(STORAGE_QUIZ_DATA_ID, JSON.stringify(currentQuizData))
       setLoading(false)
-      console.log('done')
-
-      console.log(quizData)
-      console.log(currentQuizData)
     }
   }, [currentQuizData])
 
   // Answer
   const answer = (idx) => {
-    if (idx == currentQuizData.correctid) {
+    if (idx == currentQuizData.correctIdx) {
       setPoints((prev) => prev + 1)
     }
 
@@ -127,40 +93,34 @@ const Quiz = () => {
 
   return (
     <>
-      {!queryError ? (
-        <>
-          {!loading && !queryLoading && currentQuizData ? (
-            <div className='quiz-wrapper'>
-              <div className='quiz-content'>
-                {quizEnd ? (
-                  <div className='final'>
-                    PODSUMOWANIE QUIZU <br />
-                    {quizCategory.name} <br />
-                    WYNIK: {points} / {quizData.length}
-                  </div>
-                ) : (
-                  <div className='question-wrapper'>
-                    <div className='question'>{currentQuizData.questiontitle}</div>
-                    <div className='answers'>
-                      {currentQuizData.questionanswers.map((a) => (
-                        <button
-                          className='answer'
-                          onClick={() => answer(a.answerid)}
-                          key={a.answerid}>
-                          {a.answer}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
+      {!loading && currentQuizData ? (
+        <div className='quiz-wrapper'>
+          <div className='quiz-content'>
+            {quizEnd ? (
+              <div className='final'>
+                PODSUMOWANIE QUIZU <br />
+                {quizCategory.name} <br />
+                WYNIK: {points} / {quizData.length}
               </div>
-            </div>
-          ) : (
-            <div className='loading'>LOADING</div>
-          )}
-        </>
+            ) : (
+              <div className='question-wrapper'>
+                <div className='question'>{currentQuizData.question}</div>
+                <div className='answers'>
+                  {currentQuizData.answers.map((a) => (
+                    <button
+                      className='answer'
+                      onClick={() => answer(currentQuizData.answers.indexOf(a))}
+                      key={currentQuizData.answers.indexOf(a)}>
+                      {a}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       ) : (
-        <div className='error'>ERROR</div>
+        <div className='loading'>LOADING</div>
       )}
     </>
   )

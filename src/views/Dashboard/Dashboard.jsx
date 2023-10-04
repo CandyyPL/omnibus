@@ -8,18 +8,6 @@ import { supabase } from '@/supa/client'
 
 const STORAGE_QUIZ_DATA_ID = 'current_quiz_data'
 
-const CATEGORIES_QUERY = `query QuestionGroups {
-  allQuestiongroups {
-    id
-    groupid
-    group
-  }
-
-  _allQuestionsMeta {
-    count
-  }
-}`
-
 const Dashboard = () => {
   const {
     session: { user },
@@ -29,8 +17,6 @@ const Dashboard = () => {
   const { setQuizCategory, setAvailQuestionCount } = useContext(QuizDataContext)
 
   const navigate = useNavigate()
-
-  const { loading, data, error } = useQuery(CATEGORIES_QUERY)
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [questionGroups, setQuestionGroups] = useState([])
@@ -71,27 +57,41 @@ const Dashboard = () => {
   //   }
   // }, [rtChange])
 
-  useEffect(() => {
-    if (data) {
-      setQuestionGroups(data.allQuestiongroups)
-      setAvailQuestionCount(data._allQuestionsMeta.count)
-    }
-  }, [data])
+  // useEffect(() => {
+  //   if (data) {
+  //     setQuestionGroups(data.allQuestiongroups)
+  //     setAvailQuestionCount(data._allQuestionsMeta.count)
+  //   }
+  // }, [data])
 
-  const selectCategory = (c) => {
-    setQuizCategory({ cat: c.groupid, name: c.group })
+  const selectCategory = async (c) => {
+    const { count } = await supabase.from(c.cid).select('*', { count: 'exact' })
+
+    setQuizCategory({ cat: c.cid, name: c.name })
+    setAvailQuestionCount(count)
+
     navigate('/quiz')
   }
 
+  useEffect(() => {
+    ;(async () => {
+      const { data } = await supabase.from('categories').select('id,cid,name')
+
+      if (data.length) {
+        setQuestionGroups(data)
+      }
+    })()
+  }, [])
+
   return (
     <div className='dashboard-wrapper'>
-      {isModalOpen && !loading && (
+      {isModalOpen && (
         <div className='category-modal-bg'>
           <div className='category-modal'>
             <ul>
               {questionGroups.map((c) => (
                 <button key={c.id} onClick={() => selectCategory(c)}>
-                  {c.group}
+                  {c.name}
                 </button>
               ))}
             </ul>
