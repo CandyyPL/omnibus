@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 const QuizEnd = ({ quizData, answers, score }) => {
   useEffect(() => {
     console.log(quizData)
@@ -5,7 +7,7 @@ const QuizEnd = ({ quizData, answers, score }) => {
     console.log(score)
   }, [])
 
-  return <div className='quiz-end-wrapper'></div>
+  return <div className='quiz-end-wrapper'>KONIEC GRY</div>
 }
 
 export default QuizEnd

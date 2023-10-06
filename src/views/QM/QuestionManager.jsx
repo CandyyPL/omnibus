@@ -1,11 +1,14 @@
-import { useRef, useState } from 'react'
 import './QuestionManager.scss'
+import { useEffect, useRef, useState } from 'react'
 import { supabase } from '@/supa/client'
 
 const QuestionManager = () => {
   const questionRef = useRef(null)
   const correctIdRef = useRef(null)
   const categoryRef = useRef(null)
+  const tagsRef = useRef(null)
+
+  const [categories, setCategoreis] = useState([])
 
   const [answers, setAnswers] = useState([
     { id: 0, answer: '' },
@@ -30,15 +33,21 @@ const QuestionManager = () => {
     let category = categoryRef.current.value
     let question = questionRef.current.value
     let correct = correctIdRef.current.value
+    let tags = tagsRef.current.value.split(',')
 
-    const answersArr = answers.map((a) => {
-      return a.answer
-    })
+    console.log(tags)
 
     await supabase
       .from(category)
-      .insert([{ question: question, answers: answersArr, correctIdx: correct }])
+      .insert([{ question: question, answers, correctIdx: correct, tags }])
   }
+
+  useEffect(() => {
+    ;(async () => {
+      const { data } = await supabase.from('categories').select('cid,name')
+      setCategoreis(data)
+    })()
+  }, [])
 
   return (
     <>
@@ -59,10 +68,15 @@ const QuestionManager = () => {
           </div>
         </ul>
         <input type='text' placeholder='ID Poprawnej odpowiedzi' ref={correctIdRef} />
+        <input type='text' placeholder='TAGS' ref={tagsRef} />
         <label htmlFor='categories'>Kategoria</label>
         <select id='categories' ref={categoryRef}>
-          <option value='q_math'>Matematyka</option>
-          <option value='q_eng'>Język angielski</option>
+          {categories &&
+            categories.map((c) => (
+              <option value={c.cid} key={c.cid}>
+                {c.name}
+              </option>
+            ))}
         </select>
         <button onClick={() => handleAddQuestion()}>Dodaj pytanie</button>
       </div>

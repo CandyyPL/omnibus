@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from 'react'
 import { QuizDataContext } from '@/providers/QuizDataProvider'
 import { supabase } from '@/supa/client'
 import QuizEnd from '@/views/Quiz/QuizEnd/QuizEnd'
+import Latex from 'react-latex'
 
 const STORAGE_QUIZ_DATA_ID = 'current_quiz_data'
 
@@ -24,10 +25,10 @@ const Quiz = () => {
   // Get specific amount of random ids
   const getRandomIds = () => {
     let ids = []
-    let amount = 2
+    let amount = 1
 
     while (ids.length < amount) {
-      let rand = Math.floor(Math.random() * availQuestionCount)
+      let rand = Math.floor(Math.random() * availQuestionCount) + 1
       if (!ids.includes(rand.toString())) ids.push(rand.toString())
       else continue
     }
@@ -47,7 +48,7 @@ const Quiz = () => {
       ;(async () => {
         const { data } = await supabase
           .from(quizCategory.cat)
-          .select('id,question,answers,correctIdx')
+          .select('id,question,answers,correctIdx,tags')
           .in('id', questionIds)
 
         if (data && data.length > 0) {
@@ -98,14 +99,21 @@ const Quiz = () => {
               <QuizEnd quizData={quizData} answers={answers} score={score} />
             ) : (
               <div className='question-wrapper'>
-                <div className='question'>{currentQuizData.question}</div>
+                <div className='question'>
+                  {currentQuizData.tags.includes('latex') ? (
+                    <Latex>{currentQuizData.question}</Latex>
+                  ) : (
+                    currentQuizData.question
+                  )}
+                </div>
                 <div className='answers'>
                   {currentQuizData.answers.map((a) => (
-                    <button
-                      className='answer'
-                      onClick={() => answer(currentQuizData.answers.indexOf(a))}
-                      key={currentQuizData.answers.indexOf(a)}>
-                      {a}
+                    <button className='answer' onClick={() => answer(a.id)} key={a.id}>
+                      {currentQuizData.tags.includes('latex') ? (
+                        <Latex>{a.answer}</Latex>
+                      ) : (
+                        a.answer
+                      )}
                     </button>
                   ))}
                 </div>
