@@ -1,45 +1,39 @@
 import './QuestionManager.scss'
 import { useEffect, useRef, useState } from 'react'
 import { supabase } from '@/supa/client'
+import { useForm } from 'react-hook-form'
 
 const QuestionManager = () => {
-  const questionRef = useRef(null)
-  const correctIdRef = useRef(null)
-  const categoryRef = useRef(null)
-  const tagsRef = useRef(null)
-
   const [categories, setCategoreis] = useState([])
+  const [answers, setAnswers] = useState([0, 1, 2, 3])
 
-  const [answers, setAnswers] = useState([
-    { id: 0, answer: '' },
-    { id: 1, answer: '' },
-    { id: 2, answer: '' },
-    { id: 3, answer: '' },
-  ])
+  const { register, handleSubmit } = useForm()
 
-  const handleAnswersChange = (id, e) => {
-    const newAnswers = answers.map((a) => {
-      if (a.id == id) {
-        return { ...a, answer: e.target.value }
-      } else {
-        return a
-      }
+  const handleAddQuestion = async (formData) => {
+    console.log(formData)
+
+    let category = formData.category
+    let tags = formData.tags.split(',')
+    let ansarr = []
+
+    formData.answers.forEach((a) => {
+      let currIdx = formData.answers.indexOf(a)
+
+      if (a !== '') ansarr.push({ id: currIdx, answer: a })
     })
 
-    setAnswers(newAnswers)
-  }
+    const { data: asd } = await supabase.from(category).select('id')
+    let lastId = asd[asd.length - 1].id
 
-  const handleAddQuestion = async () => {
-    let category = categoryRef.current.value
-    let question = questionRef.current.value
-    let correct = correctIdRef.current.value
-    let tags = tagsRef.current.value.split(',')
+    const question = {
+      id: lastId + 1,
+      question: formData.question,
+      answers: ansarr,
+      correctIdx: formData.correct,
+      tags,
+    }
 
-    console.log(tags)
-
-    await supabase
-      .from(category)
-      .insert([{ question: question, answers, correctIdx: correct, tags }])
+    await supabase.from(category).insert([question])
   }
 
   useEffect(() => {
@@ -52,33 +46,38 @@ const QuestionManager = () => {
   return (
     <>
       <div className='qm-wrapper'>
-        <input type='text' placeholder='Pytanie' ref={questionRef} />
-        <ul className='question-answers'>
-          <div className='answers'>
-            {answers.map((a) => (
-              <div className='answer' key={a.id}>
-                <input
-                  type='text'
-                  placeholder='Odpowiedź'
-                  value={answers[a.id].answer}
-                  onChange={(e) => handleAnswersChange(a.id, e)}
-                />
-              </div>
-            ))}
-          </div>
-        </ul>
-        <input type='text' placeholder='ID Poprawnej odpowiedzi' ref={correctIdRef} />
-        <input type='text' placeholder='TAGS' ref={tagsRef} />
-        <label htmlFor='categories'>Kategoria</label>
-        <select id='categories' ref={categoryRef}>
-          {categories &&
-            categories.map((c) => (
-              <option value={c.cid} key={c.cid}>
-                {c.name}
-              </option>
-            ))}
-        </select>
-        <button onClick={() => handleAddQuestion()}>Dodaj pytanie</button>
+        <form onSubmit={handleSubmit(handleAddQuestion)}>
+          <input type='text' placeholder='Pytanie' {...register('question', { required: true })} />
+          <ul className='question-answers'>
+            <div className='answers'>
+              {answers.map((a) => (
+                <div className='answer' key={a}>
+                  <input
+                    type='text'
+                    placeholder={`Odpowiedź ${a}`}
+                    {...register(`answers.${a}`, { required: true })}
+                  />
+                </div>
+              ))}
+            </div>
+          </ul>
+          <input
+            type='text'
+            placeholder='ID Poprawnej odpowiedzi'
+            {...register('correct', { required: true })}
+          />
+          <input type='text' placeholder='TAGS' {...register('tags', { required: true })} />
+          <select id='categories' {...register('category', { required: true })}>
+            <option value=''>Select category</option>
+            {categories &&
+              categories.map((c) => (
+                <option value={c.cid} key={c.cid}>
+                  {c.name}
+                </option>
+              ))}
+          </select>
+          <input type='submit' value='Dodaj pytanie' />
+        </form>
       </div>
     </>
   )

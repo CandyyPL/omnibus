@@ -23,12 +23,15 @@ const Quiz = () => {
   const [answers, setAnswers] = useState([])
 
   // Get specific amount of random ids
-  const getRandomIds = () => {
+  const getRandomIds = async () => {
     let ids = []
-    let amount = 1
+
+    const { count } = await supabase.from(quizCategory.cat).select('*', { count: 'exact' })
+
+    let amount = count
 
     while (ids.length < amount) {
-      let rand = Math.floor(Math.random() * availQuestionCount) + 1
+      let rand = Math.floor(Math.random() * availQuestionCount)
       if (!ids.includes(rand.toString())) ids.push(rand.toString())
       else continue
     }
@@ -38,8 +41,10 @@ const Quiz = () => {
 
   // Run first, check for data in storage or query questions
   useEffect(() => {
-    let ids = getRandomIds()
-    setQuestionIds(ids)
+    ;(async () => {
+      let ids = await getRandomIds()
+      setQuestionIds(ids)
+    })()
   }, [])
 
   // On question ids ready, get questions
@@ -75,12 +80,12 @@ const Quiz = () => {
   }, [currentQuizData])
 
   // Answer
-  const answer = (idx) => {
-    if (idx == currentQuizData.correctIdx) {
-      setScore((prev) => prev + 1)
-      setAnswers((prev) => [...prev, { id: idx, correct: true }])
+  const answer = (aid, qid) => {
+    if (aid == currentQuizData.correctIdx) {
+      setScore((prev) => prev + 100)
+      setAnswers((prev) => [...prev, { qid, correct: true }])
     } else {
-      setAnswers((prev) => [...prev, { id: idx, correct: false }])
+      setAnswers((prev) => [...prev, { qid, correct: false }])
     }
 
     if (currentQuestionIdx + 1 == quizData.length) {
@@ -108,7 +113,10 @@ const Quiz = () => {
                 </div>
                 <div className='answers'>
                   {currentQuizData.answers.map((a) => (
-                    <button className='answer' onClick={() => answer(a.id)} key={a.id}>
+                    <button
+                      className='answer'
+                      onClick={() => answer(a.id, currentQuizData.id)}
+                      key={a.id}>
                       {currentQuizData.tags.includes('latex') ? (
                         <Latex>{a.answer}</Latex>
                       ) : (

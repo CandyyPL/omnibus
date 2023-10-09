@@ -5,6 +5,12 @@
   background-color: colors.$light;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  ul {
+    padding: 0;
+    list-style: none;
+  }
 }

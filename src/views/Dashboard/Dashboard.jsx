@@ -20,12 +20,17 @@ const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [questionGroups, setQuestionGroups] = useState([])
   const [username, setUsername] = useState(null)
+  const [totalScore, setTotalScore] = useState(0)
+
   const [rtChange, setRtChange] = useState(null)
 
   useEffect(() => {
     sessionStorage.removeItem(STORAGE_QUIZ_DATA_ID)
     ;(async () => {
-      const { data } = await supabase.from('users').select('uid,username').eq('uid', user.id)
+      const { data } = await supabase
+        .from('users')
+        .select('uid,username,totalScore')
+        .eq('uid', user.id)
 
       if (data == null || data.length == 0) {
         await supabase
@@ -33,6 +38,7 @@ const Dashboard = () => {
           .insert([{ uid: user.id, username: user.user_metadata.username }])
       } else {
         setUsername(data[0].username)
+        setTotalScore(data[0].totalScore)
       }
     })()
   }, [])
@@ -107,7 +113,10 @@ const Dashboard = () => {
         <button onClick={() => signOut()}>WYLOGUJ</button>
       </div>
       <div className='main-content'>
-        <div className='main-topbar'>USERNAME: {username}</div>
+        <div className='main-topbar'>
+          <p>USERNAME: {username}</p>
+          <p>SCORE: {totalScore}</p>
+        </div>
         <div className='user-info'>
           <div className='rank-info'>
             <div className='rank-img'></div>
