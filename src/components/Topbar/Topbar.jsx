@@ -6,7 +6,7 @@ import busImg from '@/assets/img/bus.png'
 import susImg from '@/assets/img/sus_color.png'
 import { AuthContext } from '@/providers/AuthProvider'
 
-const Topbar = () => {
+const Topbar = ({ topbarText, type }) => {
   const easterEggLetter = useRef(null)
 
   const [titleImg, setTitleImg] = useState(busImg)
@@ -40,7 +40,8 @@ const Topbar = () => {
       <div className='title'>
         <img src={titleImg} className='left' />
         <span className='text'>
-          OMNI<span ref={easterEggLetter}>B</span>US
+          {/* OMNI<span ref={easterEggLetter}>B</span>US */}
+          {topbarText}
         </span>
         <img src={titleImg} className='right' />
       </div>
@@ -70,11 +71,11 @@ const Topbar = () => {
       <div className={`burger-menu-overlay ${isBurgerActive ? 'active' : ''}`}>
         <div className='burger-menu'>
           <div className='burger-buttons'>
-            {/* {session?.user ? null : (
+            {session?.user ? null : (
               <button className='reg' onClick={() => navigate('/register')}>
                 Zarejestruj się
               </button>
-            )} */}
+            )}
             {session?.user ? (
               <button className='dshb' onClick={() => navigate('/dashboard')}>
                 Dashboard
