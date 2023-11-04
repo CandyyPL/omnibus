@@ -69,7 +69,7 @@ const Auth = ({ type }) => {
 
   return (
     <div className='auth-wrapper'>
-      {/* {session?.user && <button onClick={() => logout()}>WYLOGUJ</button>}
+      {session?.user && <button onClick={() => logout()}>WYLOGUJ</button>}
       <div className='form'>
         {type === 'register' ? (
           <input type='text' placeholder='Nazwa użytkownika' ref={usernameRef} />
@@ -82,7 +82,7 @@ const Auth = ({ type }) => {
         <button onClick={() => auth()}>
           {type === 'register' ? 'Zarejestruj się' : 'Zaloguj się'}
         </button>
-      </div> */}
+      </div>
     </div>
   )
 }
