@@ -5,7 +5,59 @@ import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/supa/client'
 
+import rankImg0 from '@/assets/img/elements/copper.png'
+import rankImg1 from '@/assets/img/elements/solver.png'
+import rankImg2 from '@/assets/img/elements/gold.png'
+import rankImg3 from '@/assets/img/elements/hydrogen.png'
+import rankImg4 from '@/assets/img/elements/platinium.png'
+import rankImg5 from '@/assets/img/elements/titanium.png'
+import rankImg6 from '@/assets/img/elements/uranium.png'
+import rankImg7 from '@/assets/img/elements/xenon.png'
+
 const STORAGE_QUIZ_DATA_ID = 'current_quiz_data'
+
+const RANKS = [
+  {
+    id: 'copper',
+    name: 'Miedź',
+    img: rankImg0,
+  },
+  {
+    id: 'silver',
+    name: 'Srebro',
+    img: rankImg1,
+  },
+  {
+    id: 'gold',
+    name: 'Złoto',
+    img: rankImg2,
+  },
+  {
+    id: 'hydrogen',
+    name: 'Wodór',
+    img: rankImg3,
+  },
+  {
+    id: 'platinium',
+    name: 'Platyna',
+    img: rankImg4,
+  },
+  {
+    id: 'titanium',
+    name: 'Tytan',
+    img: rankImg5,
+  },
+  {
+    id: 'uranium',
+    name: 'Uran',
+    img: rankImg6,
+  },
+  {
+    id: 'xenon',
+    name: 'Xenon',
+    img: rankImg7,
+  },
+]
 
 const Dashboard = () => {
   const {
@@ -21,6 +73,9 @@ const Dashboard = () => {
   const [questionGroups, setQuestionGroups] = useState([])
   const [username, setUsername] = useState(null)
   const [totalScore, setTotalScore] = useState(0)
+
+  const [userRank, setUserRank] = useState(0)
+  const [userLevel, setUserLevel] = useState(1)
 
   const [rtChange, setRtChange] = useState(null)
 
@@ -121,16 +176,29 @@ const Dashboard = () => {
         <div className='content-inner'>
           <div className='user-info'>
             <div className='rank-info'>
-              <div className='rank-img'></div>
-              <div className='rank-name'></div>
+              <div className='rank-img'>
+                <img src={RANKS[userRank].img} alt={RANKS[userRank].id} />
+              </div>
+              <div className='rank-name'>
+                Ranga {userRank + 1}: {RANKS[userRank].name}
+              </div>
             </div>
             <div className='level-info'>
-              <div className='level'></div>
+              <div className='level'>Poziom {userLevel}</div>
               <div className='level-bar'></div>
               <div className='games-info'>
-                <div className='highest-score'></div>
-                <div className='fav-subject'></div>
-                <div className='last-game'></div>
+                <div className='highest-score'>
+                  <span className='desc'>NAJWYŻSZY WYNIK</span>
+                  <span className='value'>1337</span>
+                </div>
+                <div className='fav-subject'>
+                  <span className='desc'>ULUBIONY PRZEDMIOT</span>
+                  <span className='value'>PROGRAMOWANIE</span>
+                </div>
+                <div className='last-game'>
+                  <span className='desc'>OSTATNIA GRA</span>
+                  <span className='value'>12 DNI TEMU</span>
+                </div>
               </div>
             </div>
           </div>
