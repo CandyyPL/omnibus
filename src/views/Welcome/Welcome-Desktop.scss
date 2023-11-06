@@ -216,6 +216,12 @@
           font-family: fonts.$nunito;
           font-weight: bold;
           color: #fff;
+
+          cursor: pointer;
+
+          &:hover {
+            background-color: #007bc0;
+          }
         }
       }
     }

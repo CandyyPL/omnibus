@@ -144,12 +144,15 @@
 
       background-color: #888888cc;
 
-      transform: translateX(-100%);
+      // transform: translateX(-100%);
+
+      transition: opacity 0.5s;
+
       opacity: 0;
 
       &.active {
         opacity: 1;
-        transform: translateX(0);
+        // transform: translateX(0);
 
         .burger-menu {
           transform: translateX(0);
@@ -170,8 +173,8 @@
         top: 0;
         left: 0;
 
-        transform: translateX(-75vw);
         transition: transform 0.5s;
+        transform: translateX(-75vw);
 
         display: flex;
         flex-direction: column;
