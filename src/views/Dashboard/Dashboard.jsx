@@ -1,9 +1,11 @@
 import './Dashboard-Desktop.scss'
 import { QuizDataContext } from '@/providers/QuizDataProvider'
 import { AuthContext } from '@/providers/AuthProvider'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/supa/client'
+
+import closeImg from '@/assets/img/close.png'
 
 import rankImg0 from '@/assets/img/elements/copper.png'
 import rankImg1 from '@/assets/img/elements/silver.png'
@@ -74,10 +76,12 @@ const Dashboard = () => {
   const [username, setUsername] = useState(null)
   const [totalScore, setTotalScore] = useState(0)
 
-  const [userRank, setUserRank] = useState(0)
-  const [userLevel, setUserLevel] = useState(1)
+  const [userRank, setUserRank] = useState(4)
+  const [userLevel, setUserLevel] = useState(13)
 
   const [rtChange, setRtChange] = useState(null)
+
+  const levelBarRef = useRef()
 
   useEffect(() => {
     sessionStorage.removeItem(STORAGE_QUIZ_DATA_ID)
@@ -143,18 +147,23 @@ const Dashboard = () => {
     })()
   }, [])
 
+  const setLevelBar = (progress) => {
+    levelBarRef.current.style.setProperty('--bar-progress', `${progress}%`)
+  }
+
   return (
     <div className='dashboard-wrapper'>
       {isModalOpen && (
         <div className='category-modal-bg'>
           <div className='category-modal'>
-            <ul>
-              {questionGroups.map((c) => (
-                <button key={c.id} onClick={() => selectCategory(c)}>
-                  {c.name}
-                </button>
-              ))}
-            </ul>
+            <button className='close' onClick={() => setIsModalOpen(false)}>
+              <img src={closeImg} alt='close' />
+            </button>
+            {questionGroups.map((c) => (
+              <button className='subject' key={c.id} onClick={() => selectCategory(c)}>
+                {c.name}
+              </button>
+            ))}
           </div>
         </div>
       )}
@@ -170,7 +179,7 @@ const Dashboard = () => {
       <div className='main-content'>
         <div className='topbar'>
           <p>
-            Logged as <span className='username'>{username}</span> ({user.email})
+            Zalogowano jako <span className='username'>{username}</span> ({user.email})
           </p>
         </div>
         <div className='content-inner'>
@@ -185,11 +194,11 @@ const Dashboard = () => {
             </div>
             <div className='level-info'>
               <div className='level'>Poziom {userLevel}</div>
-              <div className='level-bar'></div>
+              <div className='level-bar' ref={levelBarRef}></div>
               <div className='games-info'>
-                <div className='highest-score'>
-                  <span className='desc'>NAJWYŻSZY WYNIK</span>
-                  <span className='value'>1337</span>
+                <div className='ov-score'>
+                  <span className='desc'>ŁĄCZNY WYNIK</span>
+                  <span className='value'>{totalScore}</span>
                 </div>
                 <div className='fav-subject'>
                   <span className='desc'>ULUBIONY PRZEDMIOT</span>
@@ -205,13 +214,43 @@ const Dashboard = () => {
           <div className='game-info-wrapper'>
             <div className='game-info'>
               <div className='game-buttons'>
-                <button onClick={() => setIsModalOpen(true)}>GRAJ</button>
-                <button>HISTORIA GIER</button>
+                <button className='play' onClick={() => setIsModalOpen(true)}>
+                  GRAJ
+                </button>
+                <button className='history'>HISTORIA GIER</button>
               </div>
-              <div className='last-game-info'></div>
+              <div className='last-game-info'>
+                <div className='title'>OSTATNIA GRA</div>
+                <div className='info'>
+                  <div className='subject'>
+                    <span className='value'>PROGRAMOWANIE</span>
+                    <span className='name'>PRZEDMIOT</span>
+                  </div>
+                  <div className='answers'>
+                    <span className='value'>9 na 10</span>
+                    <span className='name'>POPRAWNE ODPOWIEDZI</span>
+                  </div>
+                  <div className='score'>
+                    <span className='value'>2137</span>
+                    <span className='name'>WYNIK</span>
+                  </div>
+                </div>
+              </div>
             </div>
             <div className='divider'></div>
-            <div className='last-achv'></div>
+            <div className='last-achv'>
+              <div className='title'>OSTATNIE OSIĄGNIĘCIA</div>
+              <div className='content'>
+                {['x', 'd', 'c'].map((a) => (
+                  <div className='achv'>
+                    <div className='image'>
+                      <img src='https://placehold.co/512' alt='achv-image' />
+                    </div>
+                    <div className='title'>Lorem, ipsum dolor.</div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
