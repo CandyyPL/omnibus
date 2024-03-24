@@ -1,5 +1,5 @@
 import './QuestionManager.scss'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { supabase } from '@/supa/client'
 import { useForm } from 'react-hook-form'
 
@@ -45,15 +45,15 @@ const QuestionManager = () => {
 
   return (
     <>
-      <div className='qm-wrapper'>
+      <div className="qm-wrapper">
         <form onSubmit={handleSubmit(handleAddQuestion)}>
-          <input type='text' placeholder='Pytanie' {...register('question', { required: true })} />
-          <ul className='question-answers'>
-            <div className='answers'>
+          <input type="text" placeholder="Pytanie" {...register('question', { required: true })} />
+          <ul className="question-answers">
+            <div className="answers">
               {answers.map((a) => (
-                <div className='answer' key={a}>
+                <div className="answer" key={a}>
                   <input
-                    type='text'
+                    type="text"
                     placeholder={`Odpowiedź ${a}`}
                     {...register(`answers.${a}`, { required: true })}
                   />
@@ -62,13 +62,13 @@ const QuestionManager = () => {
             </div>
           </ul>
           <input
-            type='text'
-            placeholder='ID Poprawnej odpowiedzi'
+            type="text"
+            placeholder="ID Poprawnej odpowiedzi"
             {...register('correct', { required: true })}
           />
-          <input type='text' placeholder='TAGS' {...register('tags', { required: true })} />
-          <select id='categories' {...register('category', { required: true })}>
-            <option value=''>Select category</option>
+          <input type="text" placeholder="TAGS" {...register('tags', { required: true })} />
+          <select id="categories" {...register('category', { required: true })}>
+            <option value="">Select category</option>
             {categories &&
               categories.map((c) => (
                 <option value={c.cid} key={c.cid}>
@@ -76,7 +76,7 @@ const QuestionManager = () => {
                 </option>
               ))}
           </select>
-          <input type='submit' value='Dodaj pytanie' />
+          <input type="submit" value="Dodaj pytanie" />
         </form>
       </div>
     </>
