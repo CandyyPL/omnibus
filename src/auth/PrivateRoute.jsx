@@ -2,13 +2,13 @@ import { AuthContext } from '@/providers/AuthProvider'
 import { useContext } from 'react'
 import { Navigate } from 'react-router-dom'
 
-const PrivateRoute = ({ children }) => {
+const PrivateRoute = ({ route }) => {
   const { session } = useContext(AuthContext)
 
   if (session?.user) {
-    return children
+    return route
   } else {
-    return <Navigate to='/' replace={true} />
+    return <Navigate to="/" replace={true} />
   }
 }
 

@@ -4,62 +4,10 @@ import { AuthContext } from '@/providers/AuthProvider'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/supa/client'
-
 import closeImg from '@/assets/img/close.png'
-
-import rankImg0 from '@/assets/img/elements/copper.png'
-import rankImg1 from '@/assets/img/elements/silver.png'
-import rankImg2 from '@/assets/img/elements/gold.png'
-import rankImg3 from '@/assets/img/elements/hydrogen.png'
-import rankImg4 from '@/assets/img/elements/platinum.png'
-import rankImg5 from '@/assets/img/elements/titanium.png'
-import rankImg6 from '@/assets/img/elements/uranium.png'
-import rankImg7 from '@/assets/img/elements/xenon.png'
+import ranks from './ranks'
 
 const STORAGE_QUIZ_DATA_ID = 'current_quiz_data'
-
-const RANKS = [
-  {
-    id: 'copper',
-    name: 'Miedź',
-    img: rankImg0,
-  },
-  {
-    id: 'silver',
-    name: 'Srebro',
-    img: rankImg1,
-  },
-  {
-    id: 'gold',
-    name: 'Złoto',
-    img: rankImg2,
-  },
-  {
-    id: 'hydrogen',
-    name: 'Wodór',
-    img: rankImg3,
-  },
-  {
-    id: 'platinium',
-    name: 'Platyna',
-    img: rankImg4,
-  },
-  {
-    id: 'titanium',
-    name: 'Tytan',
-    img: rankImg5,
-  },
-  {
-    id: 'uranium',
-    name: 'Uran',
-    img: rankImg6,
-  },
-  {
-    id: 'xenon',
-    name: 'Xenon',
-    img: rankImg7,
-  },
-]
 
 const Dashboard = () => {
   const {
@@ -186,10 +134,10 @@ const Dashboard = () => {
           <div className="user-info">
             <div className="rank-info">
               <div className="rank-img">
-                <img src={RANKS[userRank].img} alt={RANKS[userRank].id} />
+                <img src={ranks[userRank].img} alt={ranks[userRank].id} />
               </div>
               <div className="rank-name">
-                Ranga {userRank + 1}: {RANKS[userRank].name}
+                Ranga {userRank + 1}: {ranks[userRank].name}
               </div>
             </div>
             <div className="level-info">

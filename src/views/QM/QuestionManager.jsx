@@ -76,7 +76,9 @@ const QuestionManager = () => {
                 </option>
               ))}
           </select>
-          <input type="submit" value="Dodaj pytanie" />
+          <button type="submit" class="add">
+            Dodaj pytanie
+          </button>
         </form>
       </div>
     </>
