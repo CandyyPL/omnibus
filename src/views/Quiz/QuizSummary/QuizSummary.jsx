@@ -1,13 +1,16 @@
-import './QuizEnd.scss'
+import './QuizSummary.scss'
 import { supabase } from '@/supa/client'
 import Latex from 'react-latex'
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '@/providers/AuthProvider'
+import { v4 as uuid } from 'uuid'
 
 const QuizEnd = ({ quizData, answers, score }) => {
   const {
     session: { user },
   } = useContext(AuthContext)
+
+  const [gameUuid, setGameUuid] = useState(uuid())
 
   useEffect(() => {
     ;(async () => {
@@ -15,16 +18,33 @@ const QuizEnd = ({ quizData, answers, score }) => {
 
       const totalScore = score + data[0].totalScore
 
+      let correctAnswers = answers.filter((v) => v.correct).length
+
+      const questionsData = quizData.questions.map((q, i) => {
+        return { ...q, playerAnswer: answers[i].aid }
+      })
+
       await supabase.from('users').update({ totalScore }).eq('uid', user.id)
+      await supabase.from('games').insert([
+        {
+          uuid: gameUuid,
+          player: user.id,
+          subject: quizData.cat.cat,
+          score: totalScore,
+          correctAnswers,
+          questionsData,
+        },
+      ])
     })()
   }, [])
 
   return (
     <div className='quiz-end-wrapper'>
       <h2>PODSUMOWANIE QUIZU</h2>
+      <h3>Przedmiot: {quizData.cat.name}</h3>
       <p>Wynik: {score}</p>
       <ul>
-        {quizData.map((q) => (
+        {quizData.questions.map((q) => (
           <li key={q.id}>
             <div className='id'>{q.id + 1}. </div>
             <div className='question'>

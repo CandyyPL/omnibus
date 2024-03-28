@@ -2,7 +2,7 @@ import './Quiz.scss'
 import { useContext, useEffect, useState } from 'react'
 import { QuizDataContext } from '@/providers/QuizDataProvider'
 import { supabase } from '@/supa/client'
-import QuizEnd from '@/views/Quiz/QuizSummary/QuizEnd'
+import QuizSummary from '@/views/Quiz/QuizSummary/QuizSummary'
 import Latex from 'react-latex'
 
 const STORAGE_QUIZ_DATA_ID = 'current_quiz_data'
@@ -83,9 +83,9 @@ const Quiz = () => {
   const answer = (aid, qid) => {
     if (aid == currentQuizData.correctIdx) {
       setScore((prev) => prev + 100)
-      setAnswers((prev) => [...prev, { qid, correct: true }])
+      setAnswers((prev) => [...prev, { qid, aid, correct: true }])
     } else {
-      setAnswers((prev) => [...prev, { qid, correct: false }])
+      setAnswers((prev) => [...prev, { qid, aid, correct: false }])
     }
 
     if (currentQuestionIdx + 1 == quizData.length) {
@@ -98,23 +98,27 @@ const Quiz = () => {
   return (
     <>
       {!loading && currentQuizData ? (
-        <div className="quiz-wrapper">
-          <div className="quiz-content">
+        <div className='quiz-wrapper'>
+          <div className='quiz-content'>
             {quizEnd ? (
-              <QuizEnd quizData={quizData} answers={answers} score={score} />
+              <QuizSummary
+                quizData={{ questions: quizData, cat: quizCategory }}
+                answers={answers}
+                score={score}
+              />
             ) : (
-              <div className="question-wrapper">
-                <div className="question">
+              <div className='question-wrapper'>
+                <div className='question'>
                   {currentQuizData.tags.includes('latex') ? (
                     <Latex>{currentQuizData.question}</Latex>
                   ) : (
                     currentQuizData.question
                   )}
                 </div>
-                <div className="answers">
+                <div className='answers'>
                   {currentQuizData.answers.map((a) => (
                     <button
-                      className="answer"
+                      className='answer'
                       onClick={() => answer(a.id, currentQuizData.id)}
                       key={a.id}>
                       {currentQuizData.tags.includes('latex') ? (
@@ -130,7 +134,7 @@ const Quiz = () => {
           </div>
         </div>
       ) : (
-        <div className="loading">LOADING</div>
+        <div className='loading'>LOADING</div>
       )}
     </>
   )
