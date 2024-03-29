@@ -6,6 +6,7 @@ import { AuthContext } from '@/providers/AuthProvider'
 import { v4 as uuid } from 'uuid'
 import { useNavigate } from 'react-router-dom'
 import { QuizDataContext } from '@/providers/QuizDataProvider'
+import { countValuesInObjects } from '@/helpers/customFunctions'
 
 const QuizSummary = () => {
   const {
@@ -26,11 +27,10 @@ const QuizSummary = () => {
 
       let correctAnswers = answers.filter((v) => v.correct).length
 
-      const questionsData = quizData.questions.map((q, i) => {
+      const questionsData = quizData.map((q, i) => {
         return { ...q, playerAnswer: answers[i].aid }
       })
 
-      await supabase.from('users').update({ totalScore }).eq('uid', user.id)
       await supabase.from('games').insert([
         {
           uuid: gameUuid,
@@ -41,6 +41,13 @@ const QuizSummary = () => {
           questionsData,
         },
       ])
+
+      const { data: playerGames } = await supabase.from('games').select('*').eq('player', user.id)
+
+      const subjectsCount = countValuesInObjects(playerGames, 'subject')
+      const favSubject = Object.entries(subjectsCount).sort((a, b) => b[1] - a[1])[0][0]
+
+      await supabase.from('users').update({ totalScore, favSubject }).eq('uid', user.id)
     })()
   }, [])
 

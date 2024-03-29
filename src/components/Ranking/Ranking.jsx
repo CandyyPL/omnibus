@@ -1,7 +1,7 @@
 import './Ranking.scss'
 import { getData } from '@/supa/dbFunctions'
 import { useEffect, useState } from 'react'
-import ranks from '@/components/Dashboard/ranks'
+import ranks from '@/helpers/ranks'
 
 const Ranking = () => {
   const [players, setPlayers] = useState([])
