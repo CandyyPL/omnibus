@@ -4,15 +4,12 @@ export const QuizDataContext = createContext({})
 
 const QuizDataProvider = ({ children }) => {
   const [quizCategory, setQuizCategory] = useState()
-  const [quizQuestions, setQuizQuestions] = useState()
   const [availQuestionCount, setAvailQuestionCount] = useState([])
 
   const provide = {
     quizCategory,
-    quizQuestions,
     availQuestionCount,
     setQuizCategory,
-    setQuizQuestions,
     setAvailQuestionCount,
   }
 

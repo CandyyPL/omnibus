@@ -6,7 +6,7 @@ import { supabase } from '@/supa/client'
 import closeImg from '@/assets/img/close.png'
 import ranks from './ranks'
 
-const STORAGE_QUIZ_DATA_ID = 'current_quiz_data'
+const STORAGE_QUIZ_DATA_ID = 'omnibus_quiz_data'
 
 const Dashboard = () => {
   const {
@@ -24,8 +24,6 @@ const Dashboard = () => {
 
   const [userRank, setUserRank] = useState(4)
   const [userLevel, setUserLevel] = useState(13)
-
-  const [rtChange, setRtChange] = useState(null)
 
   const levelBarRef = useRef()
 
@@ -48,33 +46,7 @@ const Dashboard = () => {
     })()
   }, [])
 
-  // useEffect(() => {
-  //   supabase
-  //     .channel('any')
-  //     .on(
-  //       'postgres_changes',
-  //       { event: 'UPDATE', schema: 'public', table: 'users', filter: `uid=eq.${user.id}` },
-  //       (payload) => {
-  //         setRtChange(payload)
-  //       }
-  //     )
-  //     .subscribe()
-  // }, [])
-
-  // useEffect(() => {
-  //   if (rtChange) {
-  //     if (rtChange.new.username !== undefined) setUsername(rtChange.new.username)
-  //   }
-  // }, [rtChange])
-
-  // useEffect(() => {
-  //   if (data) {
-  //     setQuestionGroups(data.allQuestiongroups)
-  //     setAvailQuestionCount(data._allQuestionsMeta.count)
-  //   }
-  // }, [data])
-
-  const selectCategory = async (c) => {
+  const initQuiz = async (c) => {
     const { count } = await supabase.from(c.cid).select('*', { count: 'exact' })
 
     setQuizCategory({ cat: c.cid, name: c.name })
@@ -106,7 +78,7 @@ const Dashboard = () => {
               <img src={closeImg} alt='close' />
             </button>
             {questionGroups.map((c) => (
-              <button className='subject' key={c.id} onClick={() => selectCategory(c)}>
+              <button className='subject' key={c.id} onClick={() => initQuiz(c)}>
                 {c.name}
               </button>
             ))}

@@ -4,6 +4,7 @@ import Latex from 'react-latex'
 import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '@/providers/AuthProvider'
 import { v4 as uuid } from 'uuid'
+import { useNavigate } from 'react-router-dom'
 
 const QuizEnd = ({ quizData, answers, score }) => {
   const {
@@ -11,6 +12,8 @@ const QuizEnd = ({ quizData, answers, score }) => {
   } = useContext(AuthContext)
 
   const [gameUuid, setGameUuid] = useState(uuid())
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     ;(async () => {
@@ -30,7 +33,7 @@ const QuizEnd = ({ quizData, answers, score }) => {
           uuid: gameUuid,
           player: user.id,
           subject: quizData.cat.cat,
-          score: totalScore,
+          score,
           correctAnswers,
           questionsData,
         },
@@ -58,6 +61,7 @@ const QuizEnd = ({ quizData, answers, score }) => {
           </li>
         ))}
       </ul>
+      <button onClick={() => navigate('/dashboard')}>ZAKOŃCZ QUIZ</button>
     </div>
   )
 }

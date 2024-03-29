@@ -5,24 +5,23 @@ import { supabase } from '@/supa/client'
 import QuizSummary from '@/views/Quiz/QuizSummary/QuizSummary'
 import Latex from 'react-latex'
 
-const STORAGE_QUIZ_DATA_ID = 'current_quiz_data'
+const STORAGE_QUIZ_DATA_ID = 'omnibus_quiz_data'
 
 const Quiz = () => {
+  const { quizCategory, setQuizCategory, availQuestionCount, setAvailQuestionCount } =
+    useContext(QuizDataContext)
+
   const [currentQuizData, setCurrentQuizData] = useState(null)
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(null)
 
   const [quizData, setQuizData] = useState(null)
-  const [questionIds, setQuestionIds] = useState(null)
-
-  const { quizCategory, availQuestionCount } = useContext(QuizDataContext)
 
   const [loading, setLoading] = useState(true)
-
   const [quizEnd, setQuizEnd] = useState(false)
+
   const [score, setScore] = useState(0)
   const [answers, setAnswers] = useState([])
 
-  // Get specific amount of random ids
   const getRandomIds = async () => {
     let ids = []
 
@@ -39,22 +38,18 @@ const Quiz = () => {
     return ids
   }
 
-  // Run first, check for data in storage or query questions
+  // Run first, check sessionStorage for saved data, fetch data from db
   useEffect(() => {
-    ;(async () => {
-      let ids = await getRandomIds()
-      setQuestionIds(ids)
-    })()
-  }, [])
+    const sessionData = sessionStorage.getItem(STORAGE_QUIZ_DATA_ID)
 
-  // On question ids ready, get questions
-  useEffect(() => {
-    if (questionIds) {
+    if (!sessionData) {
       ;(async () => {
+        let ids = await getRandomIds()
+
         const { data } = await supabase
           .from(quizCategory.cat)
           .select('id,question,answers,correctIdx,tags')
-          .in('id', questionIds)
+          .in('id', ids)
 
         if (data && data.length > 0) {
           setQuizData(data)
@@ -62,24 +57,39 @@ const Quiz = () => {
         }
       })()
     }
-  }, [questionIds])
 
-  // On set quiz data, set current data
+    if (sessionData) {
+      const parsedData = JSON.parse(sessionData)
+
+      setQuizCategory(parsedData.quizCategory)
+      setAvailQuestionCount(parsedData.availQuestionCount)
+      setQuizData(parsedData.quizData)
+      setCurrentQuestionIdx(parsedData.currentQuestionIdx)
+      setScore(parsedData.score)
+      setAnswers(parsedData.answers)
+    }
+  }, [])
+
+  // Run when quizData and/or currentQuestionIdx changes
   useEffect(() => {
-    if (!!quizData && quizData.length > 0 && currentQuestionIdx !== null) {
+    if (quizData && currentQuestionIdx !== null) {
       setCurrentQuizData(quizData[currentQuestionIdx])
+
+      const sessionData = {
+        quizCategory,
+        availQuestionCount,
+        quizData,
+        currentQuestionIdx,
+        score,
+        answers,
+      }
+
+      sessionStorage.setItem(STORAGE_QUIZ_DATA_ID, JSON.stringify(sessionData))
+
+      setLoading(false)
     }
   }, [quizData, currentQuestionIdx])
 
-  // On set current data, save it to storage
-  useEffect(() => {
-    if (currentQuizData !== null) {
-      sessionStorage.setItem(STORAGE_QUIZ_DATA_ID, JSON.stringify(currentQuizData))
-      setLoading(false)
-    }
-  }, [currentQuizData])
-
-  // Answer
   const answer = (aid, qid) => {
     if (aid == currentQuizData.correctIdx) {
       setScore((prev) => prev + 100)
