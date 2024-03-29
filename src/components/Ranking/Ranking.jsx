@@ -1,35 +1,47 @@
 import './Ranking.scss'
 import { getData } from '@/supa/dbFunctions'
 import { useEffect, useState } from 'react'
+import ranks from '@/components/Dashboard/ranks'
 
 const Ranking = () => {
   const [players, setPlayers] = useState([])
 
   useEffect(() => {
     ;(async () => {
-      const allUsers = await getData('users', 'uid,username,totalScore')
+      const allUsers = await getData('users', 'uid,username,totalScore,rank,level,favSubject')
       setPlayers(allUsers)
     })()
-
-    setPlayers((prev) => players.sort((a, b) => a.totalScore - b.totalScore))
   }, [])
 
   return (
     <div className='ranking-wrapper'>
       <table>
         <thead>
-          <td>#</td>
-          <td>Nazwa gracza</td>
-          <td>Całkowity wynik</td>
+          <tr>
+            <th>#</th>
+            <th>Nazwa gracza</th>
+            <th>Całkowity wynik</th>
+            <th>Ranga</th>
+            <th>Poziom</th>
+            <th>Ulubiony przedmiot</th>
+          </tr>
         </thead>
         <tbody>
-          {players.map((p, i) => (
-            <tr>
-              <td>{i + 1}</td>
-              <td>{p.username}</td>
-              <td>{p.totalScore}</td>
-            </tr>
-          ))}
+          {players
+            .toSorted((a, b) => Number(b.totalScore) - Number(a.totalScore))
+            .map((p, i) => (
+              <tr key={i}>
+                <td>{i + 1}</td>
+                <td>{p.username}</td>
+                <td>{p.totalScore}</td>
+                <td>
+                  <img src={ranks[p.rank].img} alt='rank' />
+                  {ranks[p.rank].name}
+                </td>
+                <td>{p.level}</td>
+                <td>{p.favSubject}</td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>
