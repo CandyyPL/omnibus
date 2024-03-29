@@ -5,11 +5,14 @@ import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '@/providers/AuthProvider'
 import { v4 as uuid } from 'uuid'
 import { useNavigate } from 'react-router-dom'
+import { QuizDataContext } from '@/providers/QuizDataProvider'
 
-const QuizEnd = ({ quizData, answers, score }) => {
+const QuizSummary = () => {
   const {
     session: { user },
   } = useContext(AuthContext)
+
+  const { quizCategory, quizData, score, answers } = useContext(QuizDataContext)
 
   const [gameUuid, setGameUuid] = useState(uuid())
 
@@ -32,7 +35,7 @@ const QuizEnd = ({ quizData, answers, score }) => {
         {
           uuid: gameUuid,
           player: user.id,
-          subject: quizData.cat.cat,
+          subject: quizCategory.cat,
           score,
           correctAnswers,
           questionsData,
@@ -44,10 +47,10 @@ const QuizEnd = ({ quizData, answers, score }) => {
   return (
     <div className='quiz-end-wrapper'>
       <h2>PODSUMOWANIE QUIZU</h2>
-      <h3>Przedmiot: {quizData.cat.name}</h3>
+      <h3>Przedmiot: {quizCategory.name}</h3>
       <p>Wynik: {score}</p>
       <ul>
-        {quizData.questions.map((q) => (
+        {quizData.map((q) => (
           <li key={q.id}>
             <div className='id'>{q.id + 1}. </div>
             <div className='question'>
@@ -66,4 +69,4 @@ const QuizEnd = ({ quizData, answers, score }) => {
   )
 }
 
-export default QuizEnd
+export default QuizSummary

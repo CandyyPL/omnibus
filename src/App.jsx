@@ -5,6 +5,7 @@ import PrivateRoute from '@/auth/PrivateRoute'
 import Welcome from '@/views/Welcome/Welcome'
 import Auth from '@/views/Auth/Auth'
 import Quiz from '@/views/Quiz/Quiz'
+import QuizSummary from '@/views/Quiz/QuizSummary/QuizSummary'
 import Panel from '@/views/Panel/Panel'
 import Ranking from '@/components/Ranking/Ranking'
 import Settings from '@/components/Settings/Settings'
@@ -28,7 +29,8 @@ const App = () => {
           path='/settings'
           element={<PrivateRoute route={<Panel Component={<Settings />} />} />}
         />
-        <Route path='/quiz' element={<Panel Component={<Quiz />} />} />
+        <Route path='/quiz' element={<Quiz />} />
+        <Route path='/summary' element={<QuizSummary />} />
         <Route path='/qm' element={<Panel Component={<QuestionManager />} />} />
       </Routes>
     </Router>

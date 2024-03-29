@@ -13,7 +13,8 @@ const Dashboard = () => {
     session: { user },
   } = useContext(AuthContext)
 
-  const { setQuizCategory, setAvailQuestionCount } = useContext(QuizDataContext)
+  const { setQuizCategory, setAvailQuestionCount, clearProviderStates } =
+    useContext(QuizDataContext)
 
   const navigate = useNavigate()
 
@@ -29,6 +30,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     sessionStorage.removeItem(STORAGE_QUIZ_DATA_ID)
+    clearProviderStates()
     ;(async () => {
       const { data } = await supabase
         .from('users')
