@@ -5,8 +5,11 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/supa/client'
 import closeImg from '@/assets/img/close.png'
 import ranks from '@/helpers/ranks'
+import moment from 'moment'
+import 'moment/dist/locale/pl'
 
 const STORAGE_QUIZ_DATA_ID = 'omnibus_quiz_data'
+moment.locale('pl')
 
 const Dashboard = () => {
   const {
@@ -19,9 +22,10 @@ const Dashboard = () => {
   const navigate = useNavigate()
 
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [questionGroups, setQuestionGroups] = useState([])
 
+  const [questionGroups, setQuestionGroups] = useState([])
   const [userData, setUserData] = useState(null)
+  const [lastGame, setLastGame] = useState(null)
 
   const [loading, setLoading] = useState(true)
 
@@ -33,14 +37,21 @@ const Dashboard = () => {
     ;(async () => {
       const { data } = await supabase
         .from('users')
-        .select('uid,username,totalScore,rank,level,favSubject')
+        .select('uid,username,totalScore,rank,level,favSubject,lastGame')
         .eq('uid', user.id)
 
       const { data: catData } = await supabase.from('categories').select('id,cid,name')
 
-      if (catData && data) {
+      const { data: gamesData } = await supabase
+        .from('games')
+        .select('*')
+        .eq('player', user.id)
+        .eq('uuid', data[0].lastGame)
+
+      if (catData && data && gamesData) {
         setQuestionGroups(catData)
         setUserData(data[0])
+        setLastGame(gamesData[0])
         setLoading(false)
       }
 
@@ -60,10 +71,6 @@ const Dashboard = () => {
 
     navigate('/quiz')
   }
-
-  useEffect(() => {
-    ;(async () => {})()
-  }, [])
 
   const setLevelBar = (progress) => {
     levelBarRef.current.style.setProperty('--bar-progress', `${progress}%`)
@@ -118,7 +125,11 @@ const Dashboard = () => {
                   </div>
                   <div className='last-game'>
                     <span className='desc'>OSTATNIA GRA</span>
-                    <span className='value'>12 DNI TEMU</span>
+                    <span className='value'>
+                      {lastGame && lastGame.time
+                        ? moment(lastGame.time).fromNow().toUpperCase()
+                        : 'NIGDY'}
+                    </span>
                   </div>
                 </div>
               </div>

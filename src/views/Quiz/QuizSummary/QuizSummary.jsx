@@ -1,7 +1,7 @@
 import './QuizSummary.scss'
 import { supabase } from '@/supa/client'
 import Latex from 'react-latex'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo } from 'react'
 import { AuthContext } from '@/providers/AuthProvider'
 import { v4 as uuid } from 'uuid'
 import { useNavigate } from 'react-router-dom'
@@ -15,7 +15,7 @@ const QuizSummary = () => {
 
   const { quizCategory, quizData, score, answers } = useContext(QuizDataContext)
 
-  const [gameUuid, setGameUuid] = useState(uuid())
+  const gameUuid = useMemo(() => uuid(), [])
 
   const navigate = useNavigate()
 
@@ -47,7 +47,10 @@ const QuizSummary = () => {
       const subjectsCount = countValuesInObjects(playerGames, 'subject')
       const favSubject = Object.entries(subjectsCount).sort((a, b) => b[1] - a[1])[0][0]
 
-      await supabase.from('users').update({ totalScore, favSubject }).eq('uid', user.id)
+      await supabase
+        .from('users')
+        .update({ totalScore, favSubject, lastGame: gameUuid })
+        .eq('uid', user.id)
     })()
   }, [])
 
