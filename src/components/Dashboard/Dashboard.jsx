@@ -120,7 +120,9 @@ const Dashboard = () => {
                   <div className='fav-subject'>
                     <span className='desc'>ULUBIONY PRZEDMIOT</span>
                     <span className='value'>
-                      {questionGroups.find((e) => e.cid == userData.favSubject).name}
+                      {questionGroups.find((e) => e.cid == userData.favSubject)
+                        ? questionGroups.find((e) => e.cid == userData.favSubject).name
+                        : 'Brak'}
                     </span>
                   </div>
                   <div className='last-game'>
