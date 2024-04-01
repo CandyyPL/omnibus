@@ -146,15 +146,25 @@ const Dashboard = () => {
                   <div className='title'>OSTATNIA GRA</div>
                   <div className='info'>
                     <div className='subject'>
-                      <span className='value'>PROGRAMOWANIE</span>
+                      <span className='value'>
+                        {lastGame && lastGame.subject
+                          ? questionGroups.find((e) => e.cid == lastGame.subject).name.toUpperCase()
+                          : '----'}
+                      </span>
                       <span className='name'>PRZEDMIOT</span>
                     </div>
                     <div className='answers'>
-                      <span className='value'>9 na 10</span>
+                      <span className='value'>
+                        {lastGame && lastGame.questionsData
+                          ? `${lastGame.correctAnswers} na ${lastGame.questionsData.length}`
+                          : '----'}
+                      </span>
                       <span className='name'>POPRAWNE ODPOWIEDZI</span>
                     </div>
                     <div className='score'>
-                      <span className='value'>2137</span>
+                      <span className='value'>
+                        {lastGame && lastGame.score ? lastGame.score : '----'}
+                      </span>
                       <span className='name'>WYNIK</span>
                     </div>
                   </div>
