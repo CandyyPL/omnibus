@@ -66,7 +66,7 @@ const QuestionManager = () => {
             placeholder='ID Poprawnej odpowiedzi'
             {...register('correct', { required: true })}
           />
-          <input type='text' placeholder='TAGS' {...register('tags', { required: true })} />
+          <input type='text' placeholder='TAGS' {...register('tags')} />
           <select id='categories' {...register('category', { required: true })}>
             <option value=''>Select category</option>
             {categories &&
@@ -76,7 +76,7 @@ const QuestionManager = () => {
                 </option>
               ))}
           </select>
-          <button type='submit' class='add'>
+          <button type='submit' className='add'>
             Dodaj pytanie
           </button>
         </form>
