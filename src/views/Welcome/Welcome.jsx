@@ -38,38 +38,42 @@ const Welcome = () => {
           <section className='about'>
             <div className='cards'>
               <div className='card-wrapper'>
-                <h3>Lorem, ipsum dolor.</h3>
+                <h3>Działaj efektywnie</h3>
                 <div className='card st'>
                   <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus ducimus minus
-                    voluptatem omnis iusto eum aperiam incidunt voluptate.
+                    Omnibus to innowacyjna aplikacja quizowa wspierająca proces nauki. Dzięki niej
+                    możesz szybko i skutecznie przyswoić materiał z różnych przedmiotów, sprawdzając
+                    swoją wiedzę w interaktywny sposób.
                   </p>
                 </div>
               </div>
               <div className='card-wrapper'>
-                <h3>Lorem, ipsum dolor.</h3>
+                <h3>Sprawdź swoje umiejętności</h3>
                 <div className='card nd'>
                   <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus ducimus minus
-                    voluptatem omnis iusto eum aperiam incidunt voluptate.
+                    Nie trać czasu na nudne podręczniki! Omnibus oferuje atrakcyjne quizy z zakresu
+                    matematyki, biologii, historii i wielu innych przedmiotów. Dzięki różnorodnym
+                    pytaniom i dynamicznemu interfejsowi nauka staje się prawdziwą przyjemnością!
                   </p>
                 </div>
               </div>
               <div className='card-wrapper'>
-                <h3>Lorem, ipsum dolor.</h3>
+                <h3>Narzędzie skutecznej nauki</h3>
                 <div className='card rd'>
                   <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus ducimus minus
-                    voluptatem omnis iusto eum aperiam incidunt voluptate.
+                    Zapomnij o monotonnym powtarzaniu materiału. Omnibus to nie tylko zestawy pytań,
+                    ale także interaktywne wyzwania, które sprawią, że nauka stanie się fascynująca.
+                    Śledź swoje postępy, zdobywaj osiągnięcia i rozwijaj się razem z nami!
                   </p>
                 </div>
               </div>
               <div className='card-wrapper'>
-                <h3>Lorem, ipsum dolor.</h3>
+                <h3>Klucz do sukcesu</h3>
                 <div className='card th'>
                   <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus ducimus minus
-                    voluptatem omnis iusto eum aperiam incidunt voluptate.
+                    Dzięki Omnibus będziesz gotowy na każdy egzamin! Nasza aplikacja pozwoli Ci
+                    systematycznie powtarzać materiał, sprawdzać swoje umiejętności i podnosić swoje
+                    wyniki. Z nami nauka stanie się skuteczna i satysfakcjonująca!
                   </p>
                 </div>
               </div>
