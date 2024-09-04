@@ -15,7 +15,6 @@
     "graphql-hooks": "^6.3.0",
     "moment": "^2.30.1",
     "moment-timezone": "^0.5.45",
-    "node-sass": "^9.0.0",
     "path": "^0.12.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
