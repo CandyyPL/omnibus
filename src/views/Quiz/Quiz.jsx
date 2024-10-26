@@ -1,4 +1,3 @@
-import './Quiz.scss'
 import { useContext, useEffect, useState } from 'react'
 import { QuizDataContext } from '@/providers/QuizDataProvider'
 import { supabase } from '@/supa/client'

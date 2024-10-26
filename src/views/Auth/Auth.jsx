@@ -3,6 +3,8 @@ import { supabase } from '@/supa/client'
 import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '@/providers/AuthProvider'
 import { useForm } from 'react-hook-form'
+import Style from './Auth.styles.js'
+import Topbar from '@/components/Topbar/Topbar.jsx'
 
 const BASE_URL = 'http://localhost:5173'
 const DONE_REDIRECT = '/dashboard'
@@ -57,9 +59,11 @@ const Auth = ({ type }) => {
   }, [error])
 
   return (
-    <div className='auth-wrapper'>
-      {session?.user && <button onClick={() => logout()}>WYLOGUJ</button>}
-      <form onSubmit={handleSubmit(auth)}>
+    <Style.AuthWrapper>
+      <Topbar />
+      {/* {session?.user && <button onClick={() => logout()}>WYLOGUJ</button>} */}
+      <Style.Form onSubmit={handleSubmit(auth)}>
+        {type === 'register' ? <h1>Rejestracja</h1> : <h1>Logowanie</h1>}
         {type === 'register' ? (
           <input type='text' placeholder='Nazwa użytkownika' {...register('username')} />
         ) : null}
@@ -72,8 +76,8 @@ const Auth = ({ type }) => {
         ) : null}
 
         <button type='submit'>{type === 'register' ? 'Zarejestruj się' : 'Zaloguj się'}</button>
-      </form>
-    </div>
+      </Style.Form>
+    </Style.AuthWrapper>
   )
 }
 

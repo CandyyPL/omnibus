@@ -1,12 +1,13 @@
+import { useContext, useEffect, useRef, useState } from 'react'
 import { QuizDataContext } from '@/providers/QuizDataProvider'
 import { AuthContext } from '@/providers/AuthProvider'
-import { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { supabase } from '@/supa/client'
 import closeImg from '@/assets/img/close.png'
+import Style from './Dashboard.styles.js'
+import { supabase } from '@/supa/client'
 import ranks from '@/helpers/ranks'
-import moment from 'moment'
 import 'moment/dist/locale/pl'
+import moment from 'moment'
 
 const STORAGE_QUIZ_DATA_ID = 'omnibus_quiz_data'
 moment.locale('pl')
@@ -42,17 +43,26 @@ const Dashboard = () => {
 
       const { data: catData } = await supabase.from('categories').select('id,cid,name')
 
-      const { data: gamesData } = await supabase
-        .from('games')
-        .select('*')
-        .eq('player', user.id)
-        .eq('uuid', data[0].lastGame)
+      let gamesData = null
 
-      if (catData && data && gamesData) {
+      if (data != null && data.length > 0 && data[0].lastGame != undefined) {
+        gamesData = await supabase
+          .from('games')
+          .select('*')
+          .eq('player', user.id)
+          .eq('uuid', data[0].lastGame)
+      }
+
+      if (catData) {
         setQuestionGroups(catData)
+      }
+
+      if (data) {
         setUserData(data[0])
-        setLastGame(gamesData[0])
-        setLoading(false)
+      }
+
+      if (gamesData) {
+        setLastGame(gamesData.data[0])
       }
 
       if (data == null || data.length == 0) {
@@ -60,6 +70,8 @@ const Dashboard = () => {
           .from('users')
           .insert([{ uid: user.id, username: user.user_metadata.username }])
       }
+
+      setLoading(false)
     })()
   }, [])
 
@@ -78,28 +90,30 @@ const Dashboard = () => {
 
   return (
     !loading && (
-      <div className='dashboard-wrapper'>
+      <Style.DashboardWrapper>
         {isModalOpen && (
-          <div className='category-modal-bg'>
-            <div className='category-modal'>
-              <button className='close' onClick={() => setIsModalOpen(false)}>
-                <img src={closeImg} alt='close' />
-              </button>
-              {questionGroups.map((c) => (
-                <button className='subject' key={c.id} onClick={() => initQuiz(c)}>
-                  {c.name}
+          <Style.CategoryModal>
+            <div className='bg'>
+              <div className='category-modal'>
+                <button className='close' onClick={() => setIsModalOpen(false)}>
+                  <img src={closeImg} alt='close' />
                 </button>
-              ))}
+                {questionGroups.map((c) => (
+                  <button className='subject' key={c.id} onClick={() => initQuiz(c)}>
+                    {c.name}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          </Style.CategoryModal>
         )}
-        <div className='main-content'>
+        <Style.MainContent>
           <div className='topbar'>
-            <p>
+            <span>
               Zalogowano jako <span className='username'>{userData.username}</span> ({user.email})
-            </p>
+            </span>
           </div>
-          <div className='content-inner'>
+          <div className='main-content'>
             <div className='user-info'>
               <div className='rank-info'>
                 <div className='rank-img'>
@@ -113,11 +127,11 @@ const Dashboard = () => {
                 <div className='level'>Poziom {userData.level}</div>
                 <div className='level-bar' ref={levelBarRef}></div>
                 <div className='games-info'>
-                  <div className='ov-score'>
+                  <div className='ov-score info-card'>
                     <span className='desc'>CAŁKOWITY WYNIK</span>
                     <span className='value'>{userData.totalScore}</span>
                   </div>
-                  <div className='fav-subject'>
+                  <div className='fav-subject info-card'>
                     <span className='desc'>ULUBIONY PRZEDMIOT</span>
                     <span className='value'>
                       {questionGroups.find((e) => e.cid == userData.favSubject)
@@ -125,7 +139,7 @@ const Dashboard = () => {
                         : 'Brak'}
                     </span>
                   </div>
-                  <div className='last-game'>
+                  <div className='last-game info-card'>
                     <span className='desc'>OSTATNIA GRA</span>
                     <span className='value'>
                       {lastGame && lastGame.time
@@ -172,10 +186,9 @@ const Dashboard = () => {
                   </div>
                 </div>
               </div>
-              <div className='divider'></div>
               <div className='last-achv'>
                 <div className='title'>OSTATNIE OSIĄGNIĘCIA</div>
-                <div className='content'>
+                <div className='achv-content'>
                   {['x', 'd', 'c'].map((a) => (
                     <div className='achv' key={a}>
                       <div className='image'>
@@ -188,8 +201,8 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </Style.MainContent>
+      </Style.DashboardWrapper>
     )
   )
 }

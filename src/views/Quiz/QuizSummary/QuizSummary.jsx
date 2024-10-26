@@ -1,4 +1,4 @@
-import './QuizSummary.scss'
+import './QuizSummary.styles.js'
 import { supabase } from '@/supa/client'
 import Latex from 'react-latex'
 import { useContext, useEffect, useMemo } from 'react'

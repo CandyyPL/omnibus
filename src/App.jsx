@@ -6,7 +6,6 @@ import Welcome from '@/views/Welcome/Welcome'
 import Auth from '@/views/Auth/Auth'
 import Quiz from '@/views/Quiz/Quiz'
 import QuizSummary from '@/views/Quiz/QuizSummary/QuizSummary'
-import Panel from '@/views/Panel/Panel'
 import Ranking from '@/components/Ranking/Ranking'
 import Settings from '@/components/Settings/Settings'
 
@@ -17,21 +16,12 @@ const App = () => {
         <Route path='/' element={<Welcome />} />
         <Route path='/register' element={<Auth type='register' />} />
         <Route path='/login' element={<Auth type='login' />} />
-        <Route
-          path='/dashboard'
-          element={<PrivateRoute route={<Panel Component={<Dashboard />} />} />}
-        />
-        <Route
-          path='/ranking'
-          element={<PrivateRoute route={<Panel Component={<Ranking />} />} />}
-        />
-        <Route
-          path='/settings'
-          element={<PrivateRoute route={<Panel Component={<Settings />} />} />}
-        />
-        <Route path='/quiz' element={<Quiz />} />
-        <Route path='/summary' element={<QuizSummary />} />
-        <Route path='/qm' element={<Panel Component={<QuestionManager />} />} />
+        <Route path='/dashboard' element={<PrivateRoute route={<Dashboard />} />} />
+        <Route path='/ranking' element={<PrivateRoute route={<Ranking />} />} />
+        <Route path='/settings' element={<PrivateRoute route={<Settings />} />} />
+        <Route path='/quiz' element={<PrivateRoute route={<Quiz />} />} />
+        <Route path='/summary' element={<PrivateRoute route={<QuizSummary />} />} />
+        <Route path='/qm' element={<PrivateRoute route={<QuestionManager />} />} />
       </Routes>
     </Router>
   )
