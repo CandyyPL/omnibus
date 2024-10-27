@@ -10,7 +10,7 @@ const BASE_URL = 'http://localhost:5173'
 const DONE_REDIRECT = '/dashboard'
 
 const Auth = ({ type }) => {
-  const { register, handleSubmit } = useForm()
+  const { register, handleSubmit, reset } = useForm()
 
   const [error, setError] = useState(null)
 
@@ -57,6 +57,10 @@ const Auth = ({ type }) => {
       alert(error)
     }
   }, [error])
+
+  useEffect(() => {
+    reset({ username: '', email: '', password: '', passwordRepeat: '' })
+  }, [])
 
   return (
     <Style.AuthWrapper>

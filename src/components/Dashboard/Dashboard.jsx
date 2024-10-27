@@ -8,6 +8,7 @@ import { supabase } from '@/supa/client'
 import ranks from '@/helpers/ranks'
 import 'moment/dist/locale/pl'
 import moment from 'moment'
+import Topbar from '@/components/Topbar/Topbar.jsx'
 
 const STORAGE_QUIZ_DATA_ID = 'omnibus_quiz_data'
 moment.locale('pl')
@@ -91,15 +92,16 @@ const Dashboard = () => {
   return (
     !loading && (
       <Style.DashboardWrapper>
+        <Topbar title='PANEL' titleUrl={'#'} />
         {isModalOpen && (
           <Style.CategoryModal>
-            <div className='bg'>
+            <div className='category-modal-bg'>
               <div className='category-modal'>
-                <button className='close' onClick={() => setIsModalOpen(false)}>
+                <button className='modal-close' onClick={() => setIsModalOpen(false)}>
                   <img src={closeImg} alt='close' />
                 </button>
                 {questionGroups.map((c) => (
-                  <button className='subject' key={c.id} onClick={() => initQuiz(c)}>
+                  <button className='modal-subject' key={c.id} onClick={() => initQuiz(c)}>
                     {c.name}
                   </button>
                 ))}
@@ -108,12 +110,12 @@ const Dashboard = () => {
           </Style.CategoryModal>
         )}
         <Style.MainContent>
-          <div className='topbar'>
+          {/* <div className='dashboard-topbar'>
             <span>
               Zalogowano jako <span className='username'>{userData.username}</span> ({user.email})
             </span>
-          </div>
-          <div className='main-content'>
+          </div> */}
+          <div className='dashboard-main-content'>
             <div className='user-info'>
               <div className='rank-info'>
                 <div className='rank-img'>

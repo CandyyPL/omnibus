@@ -4,10 +4,11 @@ const DashboardWrapper = styled.div`
   width: 100%;
 
   display: flex;
+  flex-direction: column;
 `
 
 const CategoryModal = styled.section`
-  .bg {
+  .category-modal-bg {
     width: 100vw;
     height: 100vh;
 
@@ -20,10 +21,12 @@ const CategoryModal = styled.section`
     background-color: #eeeeee88;
 
     display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .category-modal {
-    width: 600px;
+    width: 80%;
     height: 400px;
 
     background-color: #ddd;
@@ -33,18 +36,19 @@ const CategoryModal = styled.section`
     padding: 25px;
 
     display: flex;
+    flex-direction: column;
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: center;
 
     position: relative;
 
-    .close {
+    .modal-close {
       width: 25px;
       height: 25px;
 
       position: absolute;
-      top: 10px;
-      right: 10px;
+      top: 8px;
+      right: 8px;
 
       background-color: #fff;
 
@@ -68,9 +72,8 @@ const CategoryModal = styled.section`
       }
     }
 
-    .subject {
-      min-width: 100px;
-      max-width: 250px;
+    .modal-subject {
+      width: 90%;
       height: 60px;
 
       padding-inline: 20px;
@@ -200,7 +203,7 @@ const MainContent = styled.main`
     margin: 0;
   }
 
-  .topbar {
+  .dashboard-topbar {
     width: 100%;
     height: 75px;
 
@@ -218,7 +221,7 @@ const MainContent = styled.main`
     }
   }
 
-  .main-content {
+  .dashboard-main-content {
     width: 100%;
 
     padding-top: 50px;
@@ -269,6 +272,7 @@ const MainContent = styled.main`
 
       display: flex;
       flex-direction: column;
+      align-items: center;
 
       .level {
         font-size: 46px;

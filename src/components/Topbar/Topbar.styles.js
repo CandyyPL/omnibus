@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 const TopbarWrapper = styled.header`
   width: 100%;
-  height: 100px;
+  height: 75px;
 
   background-color: #2ca87f;
 
@@ -19,12 +19,14 @@ const Title = styled.div`
   margin-right: 20px;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
+  font-family: ${({ theme }) => theme.fonts.montalt};
+
   .text {
     font-size: 40px;
-    font-family: ${({ theme }) => theme.fonts.montalt};
     font-weight: bold;
     color: ${({ theme }) => theme.colors.dark};
 

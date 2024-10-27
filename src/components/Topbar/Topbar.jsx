@@ -3,7 +3,7 @@ import busImg from '@/assets/img/bus.png'
 import Style from './Topbar.styles.js'
 import { useState } from 'react'
 
-const Topbar = () => {
+const Topbar = ({ title, subtitle, titleUrl }) => {
   const [isBurgerActive, setIsBurgerActive] = useState(false)
 
   const handleCloseMenu = () => {
@@ -17,9 +17,10 @@ const Topbar = () => {
       </Style.MenuWrapper>
       <Style.Title>
         {/* <img src={busImg} className='left' /> */}
-        <a href='/' className='text'>
-          OMNIBUS
+        <a href={titleUrl} className='text'>
+          {title}
         </a>
+        <span>{subtitle}</span>
         {/* <img src={busImg} className='right' /> */}
       </Style.Title>
       <Style.Burger

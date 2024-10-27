@@ -28,7 +28,7 @@ const Welcome = () => {
 
   return (
     <Style.WelcomeWrapper>
-      <Topbar topbarText={'OMNIBUS'} type={'welcome'} />
+      <Topbar title='OMNIBUS' />
       <Style.WelcomeContent>
         <div className='bus-img'>
           <img src={mainSchoolBusImg} />
@@ -118,10 +118,11 @@ const Welcome = () => {
         </Style.JoinWrapper>
       </Style.WelcomeContent>
       <Style.Footer>
+        <span>Omnibus &copy; 2024. All rights reserved</span>
         <span>
           Powered by{' '}
           <a href='https://github.com/CandyyPL' target='_blank'>
-            CandyyPL
+            Marcel Betański
           </a>
         </span>
       </Style.Footer>

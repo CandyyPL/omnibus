@@ -219,16 +219,18 @@ const Footer = styled.footer`
   background-color: #2ca87f;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
   a {
-    color: #eee;
+    color: darkorange;
   }
 
-  font-size: 24px;
+  color: gold;
+
+  font-size: 18px;
   font-family: ${({ theme }) => theme.fonts.nunito};
-  font-weight: bold;
 `
 
 export default {

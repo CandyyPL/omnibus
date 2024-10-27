@@ -1,5 +1,7 @@
 import { AuthContext } from '@/providers/AuthProvider.jsx'
 import { useNavigate } from 'react-router-dom'
+import Style from './TopbarButtons.styles.js'
+import { supabase } from '@/supa/client.js'
 import { useContext } from 'react'
 
 const TopbarMenu = ({ closeFunction }) => {
@@ -7,28 +9,32 @@ const TopbarMenu = ({ closeFunction }) => {
 
   const navigate = useNavigate()
 
+  const logout = async () => {
+    const { error } = await supabase.auth.signOut()
+
+    if (error) setError(error)
+
+    navigate('/')
+  }
+
   const handleClick = (url) => {
     closeFunction()
     navigate(url)
   }
 
   return (
-    <>
-      {session?.user ? null : (
-        <button className='reg' onClick={() => handleClick('/register')}>
-          Zarejestruj się
-        </button>
-      )}
+    <Style.ButtonsWrapper>
+      <button onClick={() => handleClick('/')}>Strona główna</button>
+      {session?.user ? null : <button onClick={() => handleClick('/register')}>Rejestracja</button>}
       {session?.user ? (
-        <button className='dshb' onClick={() => handleClick('/dashboard')}>
-          Dashboard
-        </button>
+        <>
+          <button onClick={() => handleClick('/dashboard')}>Panel</button>
+          <button onClick={() => logout()}>Wyloguj</button>
+        </>
       ) : (
-        <button className='log' onClick={() => handleClick('/login')}>
-          Zaloguj się
-        </button>
+        <button onClick={() => handleClick('/login')}>Logowanie</button>
       )}
-    </>
+    </Style.ButtonsWrapper>
   )
 }
 
