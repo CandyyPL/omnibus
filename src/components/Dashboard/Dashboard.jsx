@@ -1,6 +1,8 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import { QuizDataContext } from '@/providers/QuizDataProvider'
 import { AuthContext } from '@/providers/AuthProvider'
+import Topbar from '@/components/Topbar/Topbar.jsx'
+import warningImg from '@/assets/img/warning.png'
 import { useNavigate } from 'react-router-dom'
 import closeImg from '@/assets/img/close.png'
 import Style from './Dashboard.styles.js'
@@ -8,7 +10,6 @@ import { supabase } from '@/supa/client'
 import ranks from '@/helpers/ranks'
 import 'moment/dist/locale/pl'
 import moment from 'moment'
-import Topbar from '@/components/Topbar/Topbar.jsx'
 
 const STORAGE_QUIZ_DATA_ID = 'omnibus_quiz_data'
 moment.locale('pl')
@@ -31,6 +32,10 @@ const Dashboard = () => {
 
   const [loading, setLoading] = useState(true)
 
+  const [isInfoVisible, setInfoVisible] = useState(false)
+  const [infoType, setInfoType] = useState('')
+  const [infoContent, setInfoContent] = useState('')
+
   const levelBarRef = useRef()
 
   useEffect(() => {
@@ -50,8 +55,8 @@ const Dashboard = () => {
         gamesData = await supabase
           .from('games')
           .select('*')
-          .eq('player', user.id)
-          .eq('uuid', data[0].lastGame)
+          .eq('player_uid', user.id)
+          .eq('game_uid', data[0].lastGame)
       }
 
       if (catData) {
@@ -73,6 +78,16 @@ const Dashboard = () => {
       }
 
       setLoading(false)
+
+      // if (user.user_metadata.email_verified === false) {
+      //   setInfoContent('Potwierdź swój adres e-mail, aby w pełni korzystać z Omnibusa!')
+      //   setInfoType('warning')
+      //   setInfoVisible(true)
+      // }
+
+      // console.log(data)
+      // console.log(user)
+      // console.log(gamesData)
     })()
   }, [])
 
@@ -85,9 +100,17 @@ const Dashboard = () => {
     navigate('/quiz')
   }
 
-  const setLevelBar = (progress) => {
-    levelBarRef.current.style.setProperty('--bar-progress', `${progress}%`)
-  }
+  // const handleResendEmailConfirmation = async () => {
+  //   const { error } = await supabase.auth.resend({
+  //     type: 'signup',
+  //     email: user.email,
+  //     options: {
+  //       emailRedirectTo: '/',
+  //     },
+  //   })
+
+  //   console.log(error)
+  // }
 
   return (
     !loading && (
@@ -110,35 +133,57 @@ const Dashboard = () => {
           </Style.CategoryModal>
         )}
         <Style.MainContent>
-          {/* <div className='dashboard-topbar'>
-            <span>
-              Zalogowano jako <span className='username'>{userData.username}</span> ({user.email})
-            </span>
-          </div> */}
+          {isInfoVisible && (
+            <div className='dashboard-topbar'>
+              <span className={infoType}>
+                {/* Zalogowano jako <span className='username'>{userData.username}</span> ({user.email}) */}
+                {infoContent}
+                {/* {user.user_metadata.email_verified ? null : (
+                  <button className='resend' onClick={() => handleResendEmailConfirmation()}>
+                    Wyślij ponownie
+                  </button>
+                )} */}
+              </span>
+            </div>
+          )}
           <div className='dashboard-main-content'>
             <div className='user-info'>
               <div className='rank-info'>
                 <div className='rank-img'>
-                  <img src={ranks[userData.rank].img} alt={ranks[userData.rank].id} />
+                  {userData && userData.rank != undefined ? (
+                    <img src={ranks[userData.rank].img} alt={ranks[userData.rank].id} />
+                  ) : null}
                 </div>
                 <div className='rank-name'>
-                  Ranga {userData.rank + 1}: {ranks[userData.rank].name}
+                  {userData && userData.rank != undefined ? (
+                    <>
+                      Ranga {userData.rank + 1}: {ranks[userData.rank].name}
+                    </>
+                  ) : null}
                 </div>
               </div>
               <div className='level-info'>
-                <div className='level'>Poziom {userData.level}</div>
+                <div className='level'>
+                  {userData && userData.level != undefined ? <>Poziom {userData.level}</> : null}
+                </div>
                 <div className='level-bar' ref={levelBarRef}></div>
                 <div className='games-info'>
                   <div className='ov-score info-card'>
                     <span className='desc'>CAŁKOWITY WYNIK</span>
-                    <span className='value'>{userData.totalScore}</span>
+                    <span className='value'>
+                      {userData && userData.totalScore != undefined ? (
+                        <>{userData.totalScore}</>
+                      ) : null}
+                    </span>
                   </div>
                   <div className='fav-subject info-card'>
                     <span className='desc'>ULUBIONY PRZEDMIOT</span>
                     <span className='value'>
-                      {questionGroups.find((e) => e.cid == userData.favSubject)
-                        ? questionGroups.find((e) => e.cid == userData.favSubject).name
-                        : 'Brak'}
+                      {questionGroups && questionGroups.length > 0
+                        ? questionGroups.find((e) => e.cid == userData.favSubject)
+                          ? questionGroups.find((e) => e.cid == userData.favSubject).name
+                          : 'Brak'
+                        : null}
                     </span>
                   </div>
                   <div className='last-game info-card'>
@@ -157,6 +202,12 @@ const Dashboard = () => {
                 <div className='game-buttons'>
                   <button className='play' onClick={() => setIsModalOpen(true)}>
                     GRAJ
+                    {/* {user.user_metadata.email_verified ? null : (
+                      <span>
+                        <img src={warningImg} alt='warning' />
+                        Potwierdź adres e-mail
+                      </span>
+                    )} */}
                   </button>
                   <button className='history'>HISTORIA GIER</button>
                 </div>

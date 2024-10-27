@@ -3,7 +3,7 @@ import busImg from '@/assets/img/bus.png'
 import Style from './Topbar.styles.js'
 import { useState } from 'react'
 
-const Topbar = ({ title, subtitle, titleUrl }) => {
+const Topbar = ({ title = 'OMNIBUS', subtitle, titleUrl = '/' }) => {
   const [isBurgerActive, setIsBurgerActive] = useState(false)
 
   const handleCloseMenu = () => {

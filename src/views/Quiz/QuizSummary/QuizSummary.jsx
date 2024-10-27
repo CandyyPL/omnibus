@@ -1,4 +1,3 @@
-import './QuizSummary.styles.js'
 import { supabase } from '@/supa/client'
 import Latex from 'react-latex'
 import { useContext, useEffect, useMemo } from 'react'
@@ -7,6 +6,7 @@ import { v4 as uuid } from 'uuid'
 import { useNavigate } from 'react-router-dom'
 import { QuizDataContext } from '@/providers/QuizDataProvider'
 import { countValuesInObjects } from '@/helpers/customFunctions'
+import Style from './QuizSummary.styles.js'
 
 const QuizSummary = () => {
   const {
@@ -33,8 +33,8 @@ const QuizSummary = () => {
 
       await supabase.from('games').insert([
         {
-          uuid: gameUuid,
-          player: user.id,
+          game_uid: gameUuid,
+          player_uid: user.id,
           subject: quizCategory.cat,
           score,
           correctAnswers,
@@ -42,10 +42,15 @@ const QuizSummary = () => {
         },
       ])
 
-      const { data: playerGames } = await supabase.from('games').select('*').eq('player', user.id)
+      const { data: playerGames } = await supabase
+        .from('games')
+        .select('*')
+        .eq('player_uid', user.id)
 
       const subjectsCount = countValuesInObjects(playerGames, 'subject')
       const favSubject = Object.entries(subjectsCount).sort((a, b) => b[1] - a[1])[0][0]
+
+      console.log('asd')
 
       await supabase
         .from('users')
@@ -55,7 +60,7 @@ const QuizSummary = () => {
   }, [])
 
   return (
-    <div className='quiz-end-wrapper'>
+    <Style.QuizEndWrapper>
       <h2>PODSUMOWANIE QUIZU</h2>
       <h3>Przedmiot: {quizCategory.name}</h3>
       <p>Wynik: {score}</p>
@@ -75,7 +80,7 @@ const QuizSummary = () => {
         ))}
       </ul>
       <button onClick={() => navigate('/dashboard')}>ZAKOŃCZ QUIZ</button>
-    </div>
+    </Style.QuizEndWrapper>
   )
 }
 

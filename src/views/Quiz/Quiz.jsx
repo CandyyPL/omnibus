@@ -1,8 +1,9 @@
-import { useContext, useEffect, useState } from 'react'
 import { QuizDataContext } from '@/providers/QuizDataProvider'
-import { supabase } from '@/supa/client'
-import Latex from 'react-latex'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { supabase } from '@/supa/client'
+import Style from './Quiz.styles.js'
+import Latex from 'react-latex'
 
 const STORAGE_QUIZ_DATA_ID = 'omnibus_quiz_data'
 
@@ -119,29 +120,27 @@ const Quiz = () => {
   return (
     <>
       {!loading && currentQuizData ? (
-        <div className='quiz-wrapper'>
-          <div className='quiz-content'>
-            <div className='question-wrapper'>
-              <div className='question'>
-                {currentQuizData.tags.includes('latex') ? (
-                  <Latex>{currentQuizData.question}</Latex>
-                ) : (
-                  currentQuizData.question
-                )}
-              </div>
-              <div className='answers'>
-                {currentQuizData.answers.map((a) => (
-                  <button
-                    className='answer'
-                    onClick={() => answer(a.id, currentQuizData.id)}
-                    key={a.id}>
-                    {currentQuizData.tags.includes('latex') ? <Latex>{a.answer}</Latex> : a.answer}
-                  </button>
-                ))}
-              </div>
+        <Style.QuizWrapper>
+          <div className='question-wrapper'>
+            <div className='question'>
+              {currentQuizData.tags.includes('latex') ? (
+                <Latex>{currentQuizData.question}</Latex>
+              ) : (
+                currentQuizData.question
+              )}
+            </div>
+            <div className='answers'>
+              {currentQuizData.answers.map((a) => (
+                <button
+                  className='answer'
+                  onClick={() => answer(a.id, currentQuizData.id)}
+                  key={a.id}>
+                  {currentQuizData.tags.includes('latex') ? <Latex>{a.answer}</Latex> : a.answer}
+                </button>
+              ))}
             </div>
           </div>
-        </div>
+        </Style.QuizWrapper>
       ) : (
         <div className='loading'>LOADING</div>
       )}

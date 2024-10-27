@@ -29,6 +29,8 @@ const TopbarMenu = ({ closeFunction }) => {
       {session?.user ? (
         <>
           <button onClick={() => handleClick('/dashboard')}>Panel</button>
+          <button onClick={() => handleClick('/ranking')}>Ranking</button>
+          <button onClick={() => handleClick('/settings')}>Ustawienia</button>
           <button onClick={() => logout()}>Wyloguj</button>
         </>
       ) : (

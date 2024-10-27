@@ -1,6 +1,7 @@
-import './Ranking.scss'
+import Topbar from '@/components/Topbar/Topbar.jsx'
 import { getData } from '@/supa/dbFunctions'
 import { useEffect, useState } from 'react'
+import Style from './Ranking.styles.js'
 import ranks from '@/helpers/ranks'
 
 const Ranking = () => {
@@ -22,8 +23,9 @@ const Ranking = () => {
 
   return (
     !loading && (
-      <div className='ranking-wrapper'>
-        <table>
+      <Style.RankingWrapper>
+        <Topbar title='RANKING' />
+        <Style.Table>
           <thead>
             <tr>
               <th>#</th>
@@ -56,8 +58,8 @@ const Ranking = () => {
                   </tr>
                 ))}
           </tbody>
-        </table>
-      </div>
+        </Style.Table>
+      </Style.RankingWrapper>
     )
   )
 }

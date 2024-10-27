@@ -26,7 +26,7 @@ const Title = styled.div`
   font-family: ${({ theme }) => theme.fonts.montalt};
 
   .text {
-    font-size: 40px;
+    font-size: 34px;
     font-weight: bold;
     color: ${({ theme }) => theme.colors.dark};
 

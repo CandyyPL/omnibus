@@ -1,10 +1,11 @@
 import { useEffect, useState, useContext } from 'react'
-import { supabase } from '@/supa/client'
-import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '@/providers/AuthProvider'
-import { useForm } from 'react-hook-form'
-import Style from './Auth.styles.js'
 import Topbar from '@/components/Topbar/Topbar.jsx'
+import { useNavigate } from 'react-router-dom'
+import closeImg from '@/assets/img/close.png'
+import { useForm } from 'react-hook-form'
+import { supabase } from '@/supa/client'
+import Style from './Auth.styles.js'
 
 const BASE_URL = 'http://localhost:5173'
 const DONE_REDIRECT = '/dashboard'
@@ -13,8 +14,7 @@ const Auth = ({ type }) => {
   const { register, handleSubmit, reset } = useForm()
 
   const [error, setError] = useState(null)
-
-  const { session } = useContext(AuthContext)
+  const [emailPopupVisible, setEmailPopupVisible] = useState(false)
 
   const navigate = useNavigate()
 
@@ -29,12 +29,15 @@ const Auth = ({ type }) => {
           data: {
             username: data.username,
           },
-          emailRedirectTo: `${BASE_URL}${DONE_REDIRECT}`,
+          emailRedirectTo: `${BASE_URL}`,
         },
       })
 
       if (error) setError(error)
-      else navigate(DONE_REDIRECT)
+      else {
+        clearForm()
+        setEmailPopupVisible(true)
+      }
     } else if (type === 'login') {
       const { error } = await supabase.auth.signInWithPassword({
         email: data.email,
@@ -52,6 +55,10 @@ const Auth = ({ type }) => {
     if (error) setError(error)
   }
 
+  const clearForm = () => {
+    reset({ username: '', email: '', password: '', passwordRepeat: '' })
+  }
+
   useEffect(() => {
     if (error) {
       alert(error)
@@ -59,12 +66,27 @@ const Auth = ({ type }) => {
   }, [error])
 
   useEffect(() => {
-    reset({ username: '', email: '', password: '', passwordRepeat: '' })
+    clearForm()
   }, [])
 
   return (
     <Style.AuthWrapper>
       <Topbar />
+      {emailPopupVisible && (
+        <Style.EmailPopup>
+          <div className='email-popup-bg'>
+            <div className='email-popup-content'>
+              <button className='email-popup-close' onClick={() => setEmailPopupVisible(false)}>
+                <img src={closeImg} alt='close' />
+              </button>
+              <span>
+                Twoja rejestracja przebiegła pomyślnie! Pamiętaj aby potwierdzić swój adres e-mail.
+                Masz na to 24 godziny.
+              </span>
+            </div>
+          </div>
+        </Style.EmailPopup>
+      )}
       {/* {session?.user && <button onClick={() => logout()}>WYLOGUJ</button>} */}
       <Style.Form onSubmit={handleSubmit(auth)}>
         {type === 'register' ? <h1>Rejestracja</h1> : <h1>Logowanie</h1>}
