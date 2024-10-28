@@ -5,6 +5,9 @@ import { supabase } from '@/supa/client'
 import Style from './Settings.styles.js'
 import { z } from 'zod'
 
+const DEFAULT_TOPBAR_TITLE = 'USTAWIENIA'
+const DEFAULT_TOPBAR_TITLE_URL = '#'
+
 const schema = z.object({
   newPassword: z.coerce.string().min(8, { message: 'Hasło musi mieć przynajmniej 8 znaków' }),
 })
@@ -23,13 +26,11 @@ const Settings = () => {
       console.log(error)
       return
     }
-
-    console.log(data)
   }
 
   return (
     <Style.SettingsWrapper>
-      <Topbar title='USTAWIENIA' />
+      <Topbar title={DEFAULT_TOPBAR_TITLE} titleUrl={DEFAULT_TOPBAR_TITLE_URL} />
       <div className='settings-content'>
         <form onSubmit={handleSubmit(changePassword)}>
           <input

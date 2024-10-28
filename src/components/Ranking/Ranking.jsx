@@ -11,14 +11,17 @@ const Ranking = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    ;(async () => {
+    const fetchDatabase = async () => {
       const allUsers = await getData('users', 'uid,username,totalScore,rank,level,favSubject')
       const catData = await getData('categories', 'id,cid,name')
 
       setPlayers(allUsers)
       setQuestionGroups(catData)
-      setLoading(false)
-    })()
+    }
+
+    fetchDatabase()
+      .then(() => setLoading(false))
+      .catch((error) => console.log(error))
   }, [])
 
   return (
@@ -40,19 +43,19 @@ const Ranking = () => {
             {players.length &&
               players
                 .toSorted((a, b) => Number(b.totalScore) - Number(a.totalScore))
-                .map((p, i) => (
-                  <tr key={i}>
-                    <td>{i + 1}</td>
-                    <td>{p.username}</td>
-                    <td>{p.totalScore}</td>
+                .map((player, idx) => (
+                  <tr key={idx}>
+                    <td>{idx + 1}</td>
+                    <td>{player.username}</td>
+                    <td>{player.totalScore}</td>
                     <td>
-                      <img src={ranks[p.rank].img} alt='rank' />
-                      {ranks[p.rank].name}
+                      <img src={ranks[player.rank].img} alt='rank' />
+                      {ranks[player.rank].name}
                     </td>
-                    <td>{p.level}</td>
+                    <td>{player.level}</td>
                     <td>
-                      {questionGroups.find((e) => e.cid == p.favSubject)
-                        ? questionGroups.find((e) => e.cid == p.favSubject).name
+                      {questionGroups.find((e) => e.cid == player.favSubject)
+                        ? questionGroups.find((e) => e.cid == player.favSubject).name
                         : 'Brak'}
                     </td>
                   </tr>

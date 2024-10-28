@@ -1,12 +1,12 @@
-import React from 'react'
+import QuizDataProvider from '@/providers/QuizDataProvider'
+import GlobalStyle from '@/assets/styles/GlobalStyle.js'
+import AuthProvider from '@/providers/AuthProvider'
+import { ThemeProvider } from 'styled-components'
+import Theme from '@/assets/styles/Theme.js'
 import ReactDOM from 'react-dom/client'
 import WebFont from 'webfontloader'
 import App from '@/App.jsx'
-import AuthProvider from '@/providers/AuthProvider'
-import QuizDataProvider from '@/providers/QuizDataProvider'
-import GlobalStyle from '@/assets/styles/GlobalStyle.js'
-import { ThemeProvider } from 'styled-components'
-import Theme from '@/assets/styles/Theme.js'
+import React from 'react'
 
 WebFont.load({
   google: {

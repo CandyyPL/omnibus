@@ -2,7 +2,6 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { QuizDataContext } from '@/providers/QuizDataProvider'
 import { AuthContext } from '@/providers/AuthProvider'
 import Topbar from '@/components/Topbar/Topbar.jsx'
-import warningImg from '@/assets/img/warning.png'
 import { useNavigate } from 'react-router-dom'
 import closeImg from '@/assets/img/close.png'
 import Style from './Dashboard.styles.js'
@@ -12,6 +11,9 @@ import 'moment/dist/locale/pl'
 import moment from 'moment'
 
 const STORAGE_QUIZ_DATA_ID = 'omnibus_quiz_data'
+const DEFAULT_TOPBAR_TITLE = 'PANEL'
+const DEFAULT_TOPBAR_TITLE_URL = '#'
+
 moment.locale('pl')
 
 const Dashboard = () => {
@@ -19,7 +21,7 @@ const Dashboard = () => {
     session: { user },
   } = useContext(AuthContext)
 
-  const { setQuizCategory, setAvailQuestionCount, clearProviderStates } =
+  const { setQuizCategory, setAvailableQuestionCount, clearQuizDataProviderStates } =
     useContext(QuizDataContext)
 
   const navigate = useNavigate()
@@ -27,6 +29,7 @@ const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const [questionGroups, setQuestionGroups] = useState([])
+
   const [userData, setUserData] = useState(null)
   const [lastGame, setLastGame] = useState(null)
 
@@ -40,14 +43,19 @@ const Dashboard = () => {
 
   useEffect(() => {
     sessionStorage.removeItem(STORAGE_QUIZ_DATA_ID)
-    clearProviderStates()
-    ;(async () => {
+    clearQuizDataProviderStates()
+
+    const fetchDatabase = async () => {
       const { data } = await supabase
         .from('users')
         .select('uid,username,totalScore,rank,level,favSubject,lastGame')
         .eq('uid', user.id)
 
+      setUserData(data[0] ?? null)
+
       const { data: catData } = await supabase.from('categories').select('id,cid,name')
+
+      setQuestionGroups(catData ?? null)
 
       let gamesData = null
 
@@ -59,63 +67,33 @@ const Dashboard = () => {
           .eq('game_uid', data[0].lastGame)
       }
 
-      if (catData) {
-        setQuestionGroups(catData)
-      }
+      setLastGame(gamesData.data[0] ?? null)
 
-      if (data) {
-        setUserData(data[0])
-      }
+      // if (data == null || data.length == 0) {
+      //   await supabase
+      //     .from('users')
+      //     .insert([{ uid: user.id, username: user.user_metadata.username }])
+      // } //! CHECK
+    }
 
-      if (gamesData) {
-        setLastGame(gamesData.data[0])
-      }
-
-      if (data == null || data.length == 0) {
-        await supabase
-          .from('users')
-          .insert([{ uid: user.id, username: user.user_metadata.username }])
-      }
-
-      setLoading(false)
-
-      // if (user.user_metadata.email_verified === false) {
-      //   setInfoContent('Potwierdź swój adres e-mail, aby w pełni korzystać z Omnibusa!')
-      //   setInfoType('warning')
-      //   setInfoVisible(true)
-      // }
-
-      // console.log(data)
-      // console.log(user)
-      // console.log(gamesData)
-    })()
+    fetchDatabase()
+      .then(() => setLoading(false))
+      .catch((error) => console.llog(error))
   }, [])
 
-  const initQuiz = async (c) => {
-    const { count } = await supabase.from(c.cid).select('*', { count: 'exact' })
+  const initQuiz = async (category) => {
+    const { count } = await supabase.from(category.cid).select('*', { count: 'exact' })
 
-    setQuizCategory({ cat: c.cid, name: c.name })
-    setAvailQuestionCount(count)
+    setQuizCategory({ cat: category.cid, name: category.name })
+    setAvailableQuestionCount(count)
 
     navigate('/quiz')
   }
 
-  // const handleResendEmailConfirmation = async () => {
-  //   const { error } = await supabase.auth.resend({
-  //     type: 'signup',
-  //     email: user.email,
-  //     options: {
-  //       emailRedirectTo: '/',
-  //     },
-  //   })
-
-  //   console.log(error)
-  // }
-
   return (
     !loading && (
       <Style.DashboardWrapper>
-        <Topbar title='PANEL' titleUrl={'#'} />
+        <Topbar title={DEFAULT_TOPBAR_TITLE} titleUrl={DEFAULT_TOPBAR_TITLE_URL} />
         {isModalOpen && (
           <Style.CategoryModal>
             <div className='category-modal-bg'>
@@ -123,9 +101,12 @@ const Dashboard = () => {
                 <button className='modal-close' onClick={() => setIsModalOpen(false)}>
                   <img src={closeImg} alt='close' />
                 </button>
-                {questionGroups.map((c) => (
-                  <button className='modal-subject' key={c.id} onClick={() => initQuiz(c)}>
-                    {c.name}
+                {questionGroups.map((category) => (
+                  <button
+                    className='modal-subject'
+                    key={category.id}
+                    onClick={() => initQuiz(category)}>
+                    {category.name}
                   </button>
                 ))}
               </div>
@@ -135,15 +116,7 @@ const Dashboard = () => {
         <Style.MainContent>
           {isInfoVisible && (
             <div className='dashboard-topbar'>
-              <span className={infoType}>
-                {/* Zalogowano jako <span className='username'>{userData.username}</span> ({user.email}) */}
-                {infoContent}
-                {/* {user.user_metadata.email_verified ? null : (
-                  <button className='resend' onClick={() => handleResendEmailConfirmation()}>
-                    Wyślij ponownie
-                  </button>
-                )} */}
-              </span>
+              <span className={infoType}>{infoContent}</span>
             </div>
           )}
           <div className='dashboard-main-content'>
@@ -202,12 +175,6 @@ const Dashboard = () => {
                 <div className='game-buttons'>
                   <button className='play' onClick={() => setIsModalOpen(true)}>
                     GRAJ
-                    {/* {user.user_metadata.email_verified ? null : (
-                      <span>
-                        <img src={warningImg} alt='warning' />
-                        Potwierdź adres e-mail
-                      </span>
-                    )} */}
                   </button>
                   <button className='history'>HISTORIA GIER</button>
                 </div>

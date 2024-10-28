@@ -1,9 +1,11 @@
 import TopbarButtons from '@/components/TopbarButtons/TopbarButtons.jsx'
-import busImg from '@/assets/img/bus.png'
 import Style from './Topbar.styles.js'
 import { useState } from 'react'
 
-const Topbar = ({ title = 'OMNIBUS', subtitle, titleUrl = '/' }) => {
+const DEFAULT_TITLE = 'OMNIBUS'
+const DEFAULT_TITLE_URL = '/'
+
+const Topbar = ({ title = DEFAULT_TITLE, titleUrl = DEFAULT_TITLE_URL }) => {
   const [isBurgerActive, setIsBurgerActive] = useState(false)
 
   const handleCloseMenu = () => {
@@ -16,12 +18,9 @@ const Topbar = ({ title = 'OMNIBUS', subtitle, titleUrl = '/' }) => {
         <TopbarButtons closeFunction={handleCloseMenu} />
       </Style.MenuWrapper>
       <Style.Title>
-        {/* <img src={busImg} className='left' /> */}
         <a href={titleUrl} className='text'>
           {title}
         </a>
-        <span>{subtitle}</span>
-        {/* <img src={busImg} className='right' /> */}
       </Style.Title>
       <Style.Burger
         className={`${isBurgerActive ? 'active' : ''}`}

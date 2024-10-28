@@ -1,26 +1,37 @@
 import { AuthContext } from '@/providers/AuthProvider.jsx'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Style from './TopbarButtons.styles.js'
 import { supabase } from '@/supa/client.js'
-import { useContext } from 'react'
+
+const LOGOUT_REDIRECT = '/'
 
 const TopbarMenu = ({ closeFunction }) => {
   const { session } = useContext(AuthContext)
+
+  const [error, setError] = useState('')
 
   const navigate = useNavigate()
 
   const logout = async () => {
     const { error } = await supabase.auth.signOut()
 
-    if (error) setError(error)
+    if (error) {
+      setError(error)
+      return
+    }
 
-    navigate('/')
+    navigate(LOGOUT_REDIRECT)
   }
 
   const handleClick = (url) => {
     closeFunction()
     navigate(url)
   }
+
+  useEffect(() => {
+    alert(error)
+  }, [error])
 
   return (
     <Style.ButtonsWrapper>

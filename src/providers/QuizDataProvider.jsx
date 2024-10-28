@@ -5,14 +5,14 @@ export const QuizDataContext = createContext({})
 const QuizDataProvider = ({ children }) => {
   const [quizCategory, setQuizCategory] = useState(null)
   const [quizData, setQuizData] = useState(null)
-  const [availQuestionCount, setAvailQuestionCount] = useState(0)
+  const [availableQuestionsCount, setAvailableQuestionsCount] = useState(0)
   const [score, setScore] = useState(0)
   const [answers, setAnswers] = useState([])
 
-  const clearProviderStates = () => {
+  const clearQuizDataProviderStates = () => {
     setQuizCategory(null)
     setQuizData(null)
-    setAvailQuestionCount(0)
+    setAvailableQuestionsCount(0)
     setScore(0)
     setAnswers([])
   }
@@ -20,15 +20,15 @@ const QuizDataProvider = ({ children }) => {
   const provide = {
     quizCategory,
     quizData,
-    availQuestionCount,
+    availableQuestionsCount,
     score,
     answers,
     setQuizCategory,
     setQuizData,
-    setAvailQuestionCount,
+    setAvailableQuestionsCount,
     setScore,
     setAnswers,
-    clearProviderStates,
+    clearQuizDataProviderStates,
   }
 
   return <QuizDataContext.Provider value={provide}>{children}</QuizDataContext.Provider>

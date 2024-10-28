@@ -1,8 +1,8 @@
-import { useEffect, useState, useContext } from 'react'
-import { AuthContext } from '@/providers/AuthProvider'
 import Topbar from '@/components/Topbar/Topbar.jsx'
+import { AuthType } from '@/helpers/constants.js'
 import { useNavigate } from 'react-router-dom'
 import closeImg from '@/assets/img/close.png'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { supabase } from '@/supa/client'
 import Style from './Auth.styles.js'
@@ -19,7 +19,7 @@ const Auth = ({ type }) => {
   const navigate = useNavigate()
 
   const auth = async (data) => {
-    if (type === 'register') {
+    if (type === AuthType.REGISTER) {
       if (data.password !== data.passwordRepeat) return
 
       const { error } = await supabase.auth.signUp({
@@ -33,27 +33,33 @@ const Auth = ({ type }) => {
         },
       })
 
-      if (error) setError(error)
-      else {
-        clearForm()
-        setEmailPopupVisible(true)
+      if (error) {
+        setError(error)
+        return
       }
-    } else if (type === 'login') {
+
+      clearForm()
+      setEmailPopupVisible(true)
+    } else if (type === AuthType.LOGIN) {
       const { error } = await supabase.auth.signInWithPassword({
         email: data.email,
         password: data.password,
       })
 
-      if (error) setError(error)
-      else navigate(DONE_REDIRECT)
+      if (error) {
+        setError(error)
+        return
+      }
+
+      navigate(DONE_REDIRECT)
     }
   }
 
-  const logout = async () => {
-    const { error } = await supabase.auth.signOut()
+  // const logout = async () => {
+  //   const { error } = await supabase.auth.signOut()
 
-    if (error) setError(error)
-  }
+  //   if (error) setError(error)
+  // }
 
   const clearForm = () => {
     reset({ username: '', email: '', password: '', passwordRepeat: '' })
@@ -89,19 +95,21 @@ const Auth = ({ type }) => {
       )}
       {/* {session?.user && <button onClick={() => logout()}>WYLOGUJ</button>} */}
       <Style.Form onSubmit={handleSubmit(auth)}>
-        {type === 'register' ? <h1>Rejestracja</h1> : <h1>Logowanie</h1>}
-        {type === 'register' ? (
+        {type === AuthType.REGISTER ? <h1>Rejestracja</h1> : <h1>Logowanie</h1>}
+        {type === AuthType.REGISTER ? (
           <input type='text' placeholder='Nazwa użytkownika' {...register('username')} />
         ) : null}
 
         <input type='text' placeholder='E-mail' {...register('email')} />
         <input type='password' placeholder='Hasło' {...register('password')} />
 
-        {type === 'register' ? (
+        {type === AuthType.REGISTER ? (
           <input type='password' placeholder='Powtórz hasło' {...register('passwordRepeat')} />
         ) : null}
 
-        <button type='submit'>{type === 'register' ? 'Zarejestruj się' : 'Zaloguj się'}</button>
+        <button type='submit'>
+          {type === AuthType.REGISTER ? 'Zarejestruj się' : 'Zaloguj się'}
+        </button>
       </Style.Form>
     </Style.AuthWrapper>
   )
