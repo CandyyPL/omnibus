@@ -10,6 +10,8 @@ const QuizEndWrapper = styled.div`
   justify-content: center;
   align-items: center;
 
+  padding: 20px 0 20px 0;
+
   h1,
   h2,
   h3 {
@@ -53,7 +55,6 @@ const AnswersList = styled.ul`
 
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 8px;
 
   padding: 0;
