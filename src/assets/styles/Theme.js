@@ -2,6 +2,9 @@ const Theme = {
   colors: {
     light: '#eee',
     dark: '#111',
+    red: '#eb4833',
+    green: '#499f68',
+    blue: '#4381c1',
   },
   fonts: {
     nunito: '"Nunito", sans-serif',

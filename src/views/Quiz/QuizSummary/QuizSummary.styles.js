@@ -2,7 +2,6 @@ import styled from 'styled-components'
 
 const QuizEndWrapper = styled.div`
   width: 100%;
-  height: 100vh;
 
   background-color: ${({ theme }) => theme.colors.light};
 
@@ -11,12 +10,96 @@ const QuizEndWrapper = styled.div`
   justify-content: center;
   align-items: center;
 
-  ul {
-    padding: 0;
-    list-style: none;
+  h1,
+  h2,
+  h3 {
+    font-family: ${({ theme }) => theme.fonts.fjalla};
+    font-weight: bold;
+
+    margin: 0;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+
+  h3 {
+    font-size: 18px;
+  }
+
+  .finish {
+    width: 200px;
+    height: 60px;
+
+    background-color: ${({ theme }) => theme.colors.blue};
+
+    border: none;
+    border-radius: 10px;
+
+    font-size: 20px;
+    font-family: ${({ theme }) => theme.fonts.nunito};
+    font-weight: bold;
+    color: white;
+  }
+`
+
+const AnswersList = styled.ul`
+  width: 90%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  padding: 0;
+  list-style: none;
+`
+
+const Answer = styled.li`
+  width: 100%;
+
+  background-color: #fff;
+
+  border: 2px solid black;
+  border-radius: 4px;
+
+  padding: 5px;
+
+  font-size: 16px;
+  font-family: ${({ theme }) => theme.fonts.nunito};
+  font-weight: bold;
+
+  .question-info {
+    width: 100%;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    margin-bottom: 10px;
+  }
+
+  .answer {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .correct {
+    color: ${({ theme }) => theme.colors.green};
+  }
+
+  .incorrect {
+    color: ${({ theme }) => theme.colors.red};
   }
 `
 
 export default {
   QuizEndWrapper,
+  AnswersList,
+  Answer,
 }

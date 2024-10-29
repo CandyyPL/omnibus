@@ -8,19 +8,37 @@ import { QuizDataContext } from '@/providers/QuizDataProvider'
 import { countValuesInObjects } from '@/helpers/customFunctions'
 import Style from './QuizSummary.styles.js'
 
+const STORAGE_QUIZ_DATA_ID = 'omnibus_quiz_summary_data'
+
 const QuizSummary = () => {
   const {
     session: { user },
   } = useContext(AuthContext)
 
-  const { quizCategory, quizData, score, answers } = useContext(QuizDataContext)
+  const {
+    quizCategory,
+    setQuizCategory,
+    quizData,
+    setQuizData,
+    score,
+    setScore,
+    answers,
+    setAnswers,
+  } = useContext(QuizDataContext)
 
   const gameUuid = useMemo(() => uuid(), [])
 
   const navigate = useNavigate()
 
+  const setProviderStates = (data) => {
+    setQuizCategory(data.quizCategory)
+    setQuizData(data.quizData)
+    setScore(data.score)
+    setAnswers(data.answers)
+  }
+
   useEffect(() => {
-    ;(async () => {
+    const fetchDatabase = async () => {
       const { data } = await supabase.from('users').select('totalScore').eq('uid', user.id)
 
       const totalScore = score + data[0].totalScore
@@ -50,36 +68,86 @@ const QuizSummary = () => {
       const subjectsCount = countValuesInObjects(playerGames, 'subject')
       const favSubject = Object.entries(subjectsCount).sort((a, b) => b[1] - a[1])[0][0]
 
-      console.log('asd')
-
       await supabase
         .from('users')
         .update({ totalScore, favSubject, lastGame: gameUuid })
         .eq('uid', user.id)
-    })()
+    }
+
+    const sessionData = sessionStorage.getItem(STORAGE_QUIZ_DATA_ID)
+
+    if (!sessionData) {
+      fetchDatabase()
+        .then(() => {})
+        .catch((error) => console.log(error))
+
+      const newSessionData = {
+        quizCategory,
+        quizData,
+        score,
+        answers,
+      }
+
+      sessionStorage.setItem(STORAGE_QUIZ_DATA_ID, JSON.stringify(newSessionData))
+    }
+
+    if (sessionData) {
+      const parsedData = JSON.parse(sessionData)
+
+      setProviderStates(parsedData)
+    }
+
+    console.log(answers)
+    console.log(quizData)
   }, [])
+
+  const getQuestionAnswer = (qid) => {
+    const playerAnswerId = answers.find((ans) => ans.qid == qid).aid
+    const question = quizData.find((question) => question.id == qid)
+    const playerAnswer = question.answers.find((answer) => answer.id == playerAnswerId).answer
+
+    if (question.tags.includes('latex')) {
+      return <Latex>{playerAnswer}</Latex>
+    }
+
+    return playerAnswer
+  }
 
   return (
     <Style.QuizEndWrapper>
-      <h2>PODSUMOWANIE QUIZU</h2>
-      <h3>Przedmiot: {quizCategory.name}</h3>
-      <p>Wynik: {score}</p>
-      <ul>
-        {quizData.map((q) => (
-          <li key={q.id}>
-            <div className='id'>{q.id + 1}. </div>
-            <div className='question'>
-              {q.tags.includes('latex') ? <Latex>{q.question}</Latex> : <p>{q.question}</p>}
-            </div>
-            <div className='answer'>
-              {answers.find((a) => a.qid === q.id).correct
-                ? 'Poprawna odpowiedź'
-                : 'Niepoprawna odpowiedź'}
-            </div>
-          </li>
-        ))}
-      </ul>
-      <button onClick={() => navigate('/dashboard')}>ZAKOŃCZ QUIZ</button>
+      <h1>PODSUMOWANIE QUIZU</h1>
+      <h2>Przedmiot: {quizCategory && quizCategory.name}</h2>
+      <h3>Wynik: {score && score}</h3>
+      <Style.AnswersList>
+        {quizData &&
+          quizData.map((question) => (
+            <Style.Answer key={question.id}>
+              <div className='question-info'>
+                <div className='question'>
+                  {question.id + 1}.&nbsp;
+                  {question.tags.includes('latex') ? (
+                    <Latex>{question.question}</Latex>
+                  ) : (
+                    <span>{question.question}</span>
+                  )}
+                </div>
+              </div>
+              <div className='answer'>
+                <span className='player-answer'>
+                  Twoja odpowiedź: {quizData && answers && getQuestionAnswer(question.id)}
+                </span>
+                {answers && answers.find((answer) => answer.qid === question.id).correct ? (
+                  <span className='correct'>Poprawna odpowiedź</span>
+                ) : (
+                  <span className='incorrect'>Niepoprawna odpowiedź</span>
+                )}
+              </div>
+            </Style.Answer>
+          ))}
+      </Style.AnswersList>
+      <button className='finish' onClick={() => navigate('/dashboard')}>
+        ZAKOŃCZ QUIZ
+      </button>
     </Style.QuizEndWrapper>
   )
 }
