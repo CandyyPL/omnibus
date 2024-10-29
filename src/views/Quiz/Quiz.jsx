@@ -15,8 +15,8 @@ const Quiz = () => {
     answers,
     setQuizCategory,
     setQuizData,
-    availQuestionCount,
-    setAvailQuestionCount,
+    availableQuestionsCount,
+    setAvailableQuestionsCount,
     setScore,
     setAnswers,
   } = useContext(QuizDataContext)
@@ -36,7 +36,7 @@ const Quiz = () => {
     let amount = count
 
     while (ids.length < amount) {
-      let rand = Math.floor(Math.random() * availQuestionCount)
+      let rand = Math.floor(Math.random() * availableQuestionsCount)
       if (!ids.includes(rand.toString())) ids.push(rand.toString())
       else continue
     }
@@ -47,7 +47,7 @@ const Quiz = () => {
   const setProviderStates = (data) => {
     setQuizCategory(data.quizCategory)
     setQuizData(data.quizData)
-    setAvailQuestionCount(data.availQuestionCount)
+    setAvailableQuestionsCount(data.availableQuestionsCount)
     setCurrentQuestionIdx(data.currentQuestionIdx)
     setScore(data.score)
     setAnswers(data.answers)
@@ -58,7 +58,7 @@ const Quiz = () => {
     const sessionData = sessionStorage.getItem(STORAGE_QUIZ_DATA_ID)
 
     if (!sessionData) {
-      ;(async () => {
+      const fetchDatabase = async () => {
         let ids = await getRandomIds()
 
         const { data } = await supabase
@@ -70,7 +70,11 @@ const Quiz = () => {
           setQuizData(data)
           setCurrentQuestionIdx(0)
         }
-      })()
+      }
+
+      fetchDatabase()
+        .then(() => {})
+        .catch((error) => console.log(error))
     }
 
     if (sessionData) {
@@ -88,7 +92,7 @@ const Quiz = () => {
       const sessionData = {
         quizCategory,
         quizData,
-        availQuestionCount,
+        availableQuestionsCount,
         currentQuestionIdx,
         score,
         answers,
@@ -121,15 +125,16 @@ const Quiz = () => {
     <>
       {!loading && currentQuizData ? (
         <Style.QuizWrapper>
+          <h1>{quizCategory.name}</h1>
           <div className='question-wrapper'>
-            <div className='question'>
+            <Style.Question>
               {currentQuizData.tags.includes('latex') ? (
                 <Latex>{currentQuizData.question}</Latex>
               ) : (
                 currentQuizData.question
               )}
-            </div>
-            <div className='answers'>
+            </Style.Question>
+            <Style.Answers>
               {currentQuizData.answers.map((a) => (
                 <button
                   className='answer'
@@ -138,7 +143,7 @@ const Quiz = () => {
                   {currentQuizData.tags.includes('latex') ? <Latex>{a.answer}</Latex> : a.answer}
                 </button>
               ))}
-            </div>
+            </Style.Answers>
           </div>
         </Style.QuizWrapper>
       ) : (

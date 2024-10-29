@@ -21,7 +21,7 @@ const Dashboard = () => {
     session: { user },
   } = useContext(AuthContext)
 
-  const { setQuizCategory, setAvailableQuestionCount, clearQuizDataProviderStates } =
+  const { setQuizCategory, setAvailableQuestionsCount, clearQuizDataProviderStates } =
     useContext(QuizDataContext)
 
   const navigate = useNavigate()
@@ -85,7 +85,7 @@ const Dashboard = () => {
     const { count } = await supabase.from(category.cid).select('*', { count: 'exact' })
 
     setQuizCategory({ cat: category.cid, name: category.name })
-    setAvailableQuestionCount(count)
+    setAvailableQuestionsCount(count)
 
     navigate('/quiz')
   }

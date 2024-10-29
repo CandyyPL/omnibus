@@ -30,7 +30,9 @@ const TopbarMenu = ({ closeFunction }) => {
   }
 
   useEffect(() => {
-    alert(error)
+    if (error) {
+      alert(error)
+    }
   }, [error])
 
   return (

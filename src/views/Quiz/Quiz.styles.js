@@ -7,19 +7,67 @@ const QuizWrapper = styled.main`
   background-color: ${({ theme }) => theme.colors.light};
 
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
+
+  h1 {
+    font-size: 32px;
+    font-family: ${({ theme }) => theme.fonts.fjalla};
+  }
 
   .question-wrapper {
     width: 100%;
     height: 100%;
 
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
   }
 `
 
+const Question = styled.div`
+  width: 90%;
+
+  margin-bottom: 20px;
+
+  font-size: 24px;
+  font-family: ${({ theme }) => theme.fonts.nunito};
+  font-weight: bold;
+  text-align: center;
+`
+
+const Answers = styled.div`
+  width: 90%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+
+  button.answer {
+    width: 100%;
+    height: 40px;
+    max-height: 80px;
+
+    background-color: #fff;
+
+    border: 2px solid black;
+    border-radius: 4px;
+
+    padding: 5px;
+
+    font-size: 18px;
+    font-family: ${({ theme }) => theme.fonts.nunito};
+    text-align: center;
+    word-wrap: break-word;
+  }
+`
+
 export default {
   QuizWrapper,
+  Question,
+  Answers,
 }

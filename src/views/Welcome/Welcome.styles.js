@@ -84,6 +84,7 @@ const CardsWrapper = styled.section`
     justify-content: center;
     align-items: center;
 
+    color: #eee;
     text-align: left;
 
     place-self: center;
