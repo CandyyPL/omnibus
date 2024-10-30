@@ -1,6 +1,7 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import { QuizDataContext } from '@/providers/QuizDataProvider'
 import { AuthContext } from '@/providers/AuthProvider'
+import { stringToBase64 } from '@/helpers/base64.js'
 import Topbar from '@/components/Topbar/Topbar.jsx'
 import { useNavigate } from 'react-router-dom'
 import closeImg from '@/assets/img/close.png'
@@ -11,6 +12,8 @@ import 'moment/dist/locale/pl'
 import moment from 'moment'
 
 const STORAGE_QUIZ_DATA_ID = 'omnibus_quiz_data'
+const STORAGE_QUIZ_SUMMARY_DATA_ID = 'omnibus_quiz_summary_data'
+
 const DEFAULT_TOPBAR_TITLE = 'PANEL'
 const DEFAULT_TOPBAR_TITLE_URL = '#'
 
@@ -42,7 +45,11 @@ const Dashboard = () => {
   const levelBarRef = useRef()
 
   useEffect(() => {
-    sessionStorage.removeItem(STORAGE_QUIZ_DATA_ID)
+    const storageEncodedQuizDataId = stringToBase64(STORAGE_QUIZ_DATA_ID)
+    const storageEncodedQuizSummaryId = stringToBase64(STORAGE_QUIZ_SUMMARY_DATA_ID)
+
+    sessionStorage.removeItem(storageEncodedQuizDataId)
+    sessionStorage.removeItem(storageEncodedQuizSummaryId)
     clearQuizDataProviderStates()
 
     const fetchDatabase = async () => {

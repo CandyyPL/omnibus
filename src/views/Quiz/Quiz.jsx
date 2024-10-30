@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/supa/client'
 import Style from './Quiz.styles.js'
 import Latex from 'react-latex'
+import { base64ToJson, base64ToString, jsonToBase64, stringToBase64 } from '@/helpers/base64.js'
 
 const STORAGE_QUIZ_DATA_ID = 'omnibus_quiz_data'
 
@@ -55,9 +56,10 @@ const Quiz = () => {
 
   // Run first, check sessionStorage for saved data, fetch data from db
   useEffect(() => {
-    const sessionData = sessionStorage.getItem(STORAGE_QUIZ_DATA_ID)
+    const storageEncodedId = stringToBase64(STORAGE_QUIZ_DATA_ID)
+    const sessionEncodedData = sessionStorage.getItem(storageEncodedId)
 
-    if (!sessionData) {
+    if (!sessionEncodedData) {
       const fetchDatabase = async () => {
         let ids = await getRandomIds()
 
@@ -77,7 +79,8 @@ const Quiz = () => {
         .catch((error) => console.log(error))
     }
 
-    if (sessionData) {
+    if (sessionEncodedData) {
+      const sessionData = base64ToJson(sessionEncodedData)
       const parsedData = JSON.parse(sessionData)
 
       setProviderStates(parsedData)
@@ -98,10 +101,11 @@ const Quiz = () => {
         answers,
       }
 
-      sessionStorage.setItem(STORAGE_QUIZ_DATA_ID, JSON.stringify(sessionData))
+      const storageEncodedId = stringToBase64(STORAGE_QUIZ_DATA_ID)
+      const storageEncodedData = jsonToBase64(sessionData)
 
+      sessionStorage.setItem(storageEncodedId, storageEncodedData)
       setProviderStates(sessionData)
-
       setLoading(false)
     }
   }, [quizData, currentQuestionIdx])
@@ -125,7 +129,7 @@ const Quiz = () => {
     <>
       {!loading && currentQuizData ? (
         <Style.QuizWrapper>
-          <h1>{quizCategory.name}</h1>
+          <h1>{quizCategory && quizCategory.name}</h1>
           <div className='question-wrapper'>
             <Style.Question>
               {currentQuizData.tags.includes('latex') ? (

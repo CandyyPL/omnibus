@@ -1,14 +1,15 @@
 import { supabase } from '@/supa/client'
 import Latex from 'react-latex'
-import { useContext, useEffect, useMemo } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '@/providers/AuthProvider'
 import { v4 as uuid } from 'uuid'
 import { useNavigate } from 'react-router-dom'
 import { QuizDataContext } from '@/providers/QuizDataProvider'
 import { countValuesInObjects } from '@/helpers/customFunctions'
 import Style from './QuizSummary.styles.js'
+import { base64ToJson, jsonToBase64, stringToBase64 } from '@/helpers/base64.js'
 
-const STORAGE_QUIZ_DATA_ID = 'omnibus_quiz_summary_data'
+const STORAGE_QUIZ_SUMMARY_DATA_ID = 'omnibus_quiz_summary_data'
 
 const QuizSummary = () => {
   const {
@@ -26,7 +27,7 @@ const QuizSummary = () => {
     setAnswers,
   } = useContext(QuizDataContext)
 
-  const gameUuid = useMemo(() => uuid(), [])
+  const [gameUid, setGameUid] = useState(uuid())
 
   const navigate = useNavigate()
 
@@ -35,6 +36,7 @@ const QuizSummary = () => {
     setQuizData(data.quizData)
     setScore(data.score)
     setAnswers(data.answers)
+    setGameUid(data.gameUid)
   }
 
   useEffect(() => {
@@ -51,7 +53,7 @@ const QuizSummary = () => {
 
       await supabase.from('games').insert([
         {
-          game_uid: gameUuid,
+          game_uid: gameUid,
           player_uid: user.id,
           subject: quizCategory.cat,
           score,
@@ -70,35 +72,35 @@ const QuizSummary = () => {
 
       await supabase
         .from('users')
-        .update({ totalScore, favSubject, lastGame: gameUuid })
+        .update({ totalScore, favSubject, lastGame: gameUid })
         .eq('uid', user.id)
     }
 
-    const sessionData = sessionStorage.getItem(STORAGE_QUIZ_DATA_ID)
+    const storageEncodedId = stringToBase64(STORAGE_QUIZ_SUMMARY_DATA_ID)
+    const storageEncodedData = sessionStorage.getItem(storageEncodedId)
 
-    if (!sessionData) {
+    if (!storageEncodedData) {
       fetchDatabase()
         .then(() => {})
         .catch((error) => console.log(error))
 
       const newSessionData = {
+        gameUid,
         quizCategory,
         quizData,
         score,
         answers,
       }
 
-      sessionStorage.setItem(STORAGE_QUIZ_DATA_ID, JSON.stringify(newSessionData))
+      const newSessionEncodedData = jsonToBase64(newSessionData)
+      sessionStorage.setItem(storageEncodedId, newSessionEncodedData)
     }
 
-    if (sessionData) {
-      const parsedData = JSON.parse(sessionData)
+    if (storageEncodedData) {
+      const sessionData = base64ToJson(storageEncodedData)
 
-      setProviderStates(parsedData)
+      setProviderStates(sessionData)
     }
-
-    console.log(answers)
-    console.log(quizData)
   }, [])
 
   const getQuestionAnswer = (qid) => {
