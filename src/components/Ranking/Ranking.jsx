@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react'
 import Style from './Ranking.styles.js'
 import ranks from '@/helpers/ranks'
 
+const DEFAULT_TOPBAR_TITLE = 'RANKING'
+const DEFAULT_TOPBAR_TITLE_URL = '#'
+
 const Ranking = () => {
   const [players, setPlayers] = useState([])
   const [questionGroups, setQuestionGroups] = useState([])
@@ -27,41 +30,38 @@ const Ranking = () => {
   return (
     !loading && (
       <Style.RankingWrapper>
-        <Topbar title='RANKING' />
-        <Style.Table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Nazwa gracza</th>
-              <th>Całkowity wynik</th>
-              <th>Ranga</th>
-              <th>Poziom</th>
-              <th>Ulubiony przedmiot</th>
-            </tr>
-          </thead>
-          <tbody>
-            {players.length &&
-              players
-                .toSorted((a, b) => Number(b.totalScore) - Number(a.totalScore))
-                .map((player, idx) => (
-                  <tr key={idx}>
-                    <td>{idx + 1}</td>
-                    <td>{player.username}</td>
-                    <td>{player.totalScore}</td>
-                    <td>
+        <Topbar title={DEFAULT_TOPBAR_TITLE} titleUrl={DEFAULT_TOPBAR_TITLE_URL} />
+        <Style.RankingList>
+          {players.length &&
+            players
+              .toSorted((a, b) => Number(b.totalScore) - Number(a.totalScore))
+              .map((player, idx) => (
+                <Style.PlayerEntry key={idx}>
+                  <div className='ranking-player'>
+                    <div>#{idx + 1}</div>
+                    <div>{player.username}</div>
+                    <div>Poz {player.level}</div>
+                  </div>
+                  <div className='player-info'>
+                    <div className='ranking-player-info'>
+                      <span className='info-name'>Całkowity wynik</span>
+                      {player.totalScore}
+                    </div>
+                    <div className='ranking-player-info'>
+                      <span className='info-name'>Ranga</span>
                       <img src={ranks[player.rank].img} alt='rank' />
                       {ranks[player.rank].name}
-                    </td>
-                    <td>{player.level}</td>
-                    <td>
+                    </div>
+                    <div className='ranking-player-info'>
+                      <span className='info-name'>Ulubiony przedmiot</span>
                       {questionGroups.find((e) => e.cid == player.favSubject)
                         ? questionGroups.find((e) => e.cid == player.favSubject).name
                         : 'Brak'}
-                    </td>
-                  </tr>
-                ))}
-          </tbody>
-        </Style.Table>
+                    </div>
+                  </div>
+                </Style.PlayerEntry>
+              ))}
+        </Style.RankingList>
       </Style.RankingWrapper>
     )
   )

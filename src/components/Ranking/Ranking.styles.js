@@ -25,27 +25,108 @@ const RankingWrapper = styled.main`
   }
 `
 
-const Table = styled.table`
+const RankingList = styled.ul`
   width: 90%;
 
   background-color: #eee;
 
+  list-style: none;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
   margin-top: 25px;
   border-radius: 5px;
+  padding: 0;
 
   font-size: 14px;
   font-family: ${({ theme }) => theme.fonts.nunito};
+`
 
-  tbody tr:nth-child(n) {
-    background-color: #ddd;
+const PlayerEntry = styled.li`
+  width: 100%;
+
+  background-color: #fff;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+
+  border: 3px solid ${({ theme }) => theme.colors.grey};
+  border-radius: 10px;
+  padding: 10px;
+
+  &:first-child {
+    border: 3px solid ${({ theme }) => theme.colors.yellow};
+
+    .ranking-player {
+      background-color: ${({ theme }) => theme.colors.yellow};
+    }
   }
 
-  tbody tr:nth-child(2n) {
-    background-color: #ccc;
+  &:nth-child(2) {
+    border: 3px solid ${({ theme }) => theme.colors.blue};
+
+    .ranking-player {
+      background-color: ${({ theme }) => theme.colors.blue};
+    }
+  }
+
+  .ranking-player {
+    height: 30px;
+
+    background-color: ${({ theme }) => theme.colors.grey};
+
+    border-radius: 15px;
+    padding: 10px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .player-info {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    font-size: 16px;
+
+    .ranking-player-info {
+      width: 30%;
+      height: 100%;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+
+      text-align: center;
+
+      .info-name {
+        font-weight: bold;
+      }
+    }
+  }
+
+  img {
+    height: 50px;
   }
 `
 
 export default {
   RankingWrapper,
-  Table,
+  RankingList,
+  PlayerEntry,
 }

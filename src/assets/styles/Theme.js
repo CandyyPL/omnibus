@@ -5,6 +5,8 @@ const Theme = {
     red: '#eb4833',
     green: '#499f68',
     blue: '#4381c1',
+    yellow: '#f8a312',
+    grey: '#d7d9d7',
   },
   fonts: {
     nunito: '"Nunito", sans-serif',
