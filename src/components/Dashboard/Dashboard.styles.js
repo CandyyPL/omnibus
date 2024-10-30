@@ -255,7 +255,7 @@ const MainContent = styled.main`
     width: 100%;
 
     padding-top: 25px;
-    padding-bottom: 50px;
+    padding-bottom: 25px;
 
     display: flex;
     flex-direction: column;
@@ -368,7 +368,7 @@ const MainContent = styled.main`
           font-weight: bold;
           text-align: center;
 
-          border: 2px solid #111;
+          border: 3px solid #111;
           border-radius: 20px;
 
           .desc {
@@ -387,15 +387,15 @@ const MainContent = styled.main`
         }
 
         .ov-score {
-          background-color: #f3a712;
+          background-color: ${({ theme }) => theme.colors.yellow};
         }
 
         .fav-subject {
-          background-color: #52d1dc;
+          background-color: ${({ theme }) => theme.colors.lightBlue};
         }
 
         .last-game {
-          background-color: #4ce0b3;
+          background-color: ${({ theme }) => theme.colors.lightGreen};
         }
       }
     }

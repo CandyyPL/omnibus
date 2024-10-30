@@ -213,7 +213,7 @@ const Dashboard = () => {
                   </div>
                 </div>
               </div>
-              <div className='last-achv'>
+              {/* <div className='last-achv'>
                 <div className='title'>OSTATNIE OSIĄGNIĘCIA</div>
                 <div className='achv-content'>
                   {['x', 'd', 'c'].map((a) => (
@@ -225,7 +225,7 @@ const Dashboard = () => {
                     </div>
                   ))}
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </Style.MainContent>
