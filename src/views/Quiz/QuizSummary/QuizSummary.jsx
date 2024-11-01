@@ -122,11 +122,11 @@ const QuizSummary = () => {
       <h3>Wynik: {score && score}</h3>
       <Style.AnswersList>
         {quizData &&
-          quizData.map((question) => (
+          quizData.map((question, idx) => (
             <Style.Answer key={question.id}>
               <div className='question-info'>
                 <div className='question'>
-                  {question.id + 1}.&nbsp;
+                  {idx + 1}.&nbsp;
                   {question.tags.includes('latex') ? (
                     <Latex>{question.question}</Latex>
                   ) : (

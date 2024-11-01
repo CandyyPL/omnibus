@@ -49,8 +49,7 @@ const Answers = styled.div`
 
   button.answer {
     width: 100%;
-    height: 40px;
-    max-height: 80px;
+    min-height: 40px;
 
     background-color: #fff;
 

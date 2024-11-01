@@ -4,9 +4,11 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/supa/client'
 import Style from './Quiz.styles.js'
 import Latex from 'react-latex'
-import { base64ToJson, base64ToString, jsonToBase64, stringToBase64 } from '@/helpers/base64.js'
+import { base64ToJson, jsonToBase64, stringToBase64 } from '@/helpers/base64.js'
 
 const STORAGE_QUIZ_DATA_ID = 'omnibus_quiz_data'
+
+const QUIZ_QUESTIONS_COUNT = 2
 
 const Quiz = () => {
   const {
@@ -32,12 +34,10 @@ const Quiz = () => {
   const getRandomIds = async () => {
     let ids = []
 
-    const { count } = await supabase.from(quizCategory.cat).select('*', { count: 'exact' })
+    // const { count } = await supabase.from(quizCategory.cat).select('*', { count: 'exact' })
 
-    let amount = count
-
-    while (ids.length < amount) {
-      let rand = Math.floor(Math.random() * availableQuestionsCount)
+    while (ids.length < QUIZ_QUESTIONS_COUNT) {
+      let rand = Math.floor(Math.random() * QUIZ_QUESTIONS_COUNT)
       if (!ids.includes(rand.toString())) ids.push(rand.toString())
       else continue
     }
@@ -65,11 +65,16 @@ const Quiz = () => {
 
         const { data } = await supabase
           .from(quizCategory.cat)
-          .select('id,question,answers,correctIdx,tags')
+          .select('id,question,answers,correct,tags')
           .in('id', ids)
 
         if (data && data.length > 0) {
-          setQuizData(data)
+          const shuffledQuestions = data
+            .map((value) => ({ value, sort: Math.random() }))
+            .sort((a, b) => a.sort - b.sort)
+            .map(({ value }) => value)
+
+          setQuizData(shuffledQuestions)
           setCurrentQuestionIdx(0)
         }
       }
@@ -81,9 +86,8 @@ const Quiz = () => {
 
     if (sessionEncodedData) {
       const sessionData = base64ToJson(sessionEncodedData)
-      const parsedData = JSON.parse(sessionData)
 
-      setProviderStates(parsedData)
+      setProviderStates(sessionData)
     }
   }, [])
 
@@ -111,7 +115,7 @@ const Quiz = () => {
   }, [quizData, currentQuestionIdx])
 
   const answer = (aid, qid) => {
-    if (aid == currentQuizData.correctIdx) {
+    if (aid == currentQuizData.correct) {
       setScore((prev) => prev + 100)
       setAnswers((prev) => [...prev, { qid, aid, correct: true }])
     } else {

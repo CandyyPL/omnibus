@@ -29,7 +29,7 @@ const QuestionManager = () => {
       id: lastId + 1,
       question: formData.question,
       answers: ansarr,
-      correctIdx: formData.correct,
+      correct: formData.correct,
       tags,
     }
 
