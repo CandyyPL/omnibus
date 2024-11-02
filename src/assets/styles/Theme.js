@@ -9,6 +9,7 @@ const Theme = {
     grey: '#d7d9d7',
     lightBlue: '#52d1dc',
     lightGreen: '#4ce0b3',
+    darkBlue: '#2160a0',
   },
   fonts: {
     nunito: '"Nunito", sans-serif',

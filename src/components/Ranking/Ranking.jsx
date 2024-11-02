@@ -37,22 +37,22 @@ const Ranking = () => {
               .toSorted((a, b) => Number(b.totalScore) - Number(a.totalScore))
               .map((player, idx) => (
                 <Style.PlayerEntry key={idx}>
-                  <div className='ranking-player'>
+                  <div className='player-ranking'>
                     <div>#{idx + 1}</div>
                     <div>{player.username}</div>
                     <div>Poz {player.level}</div>
                   </div>
                   <div className='player-info'>
-                    <div className='ranking-player-info'>
+                    <div className='player-ranking-info'>
                       <span className='info-name'>Całkowity wynik</span>
                       {player.totalScore}
                     </div>
-                    <div className='ranking-player-info'>
+                    <div className='player-ranking-info'>
                       <span className='info-name'>Ranga</span>
                       <img src={ranks[player.rank].img} alt='rank' />
                       {ranks[player.rank].name}
                     </div>
-                    <div className='ranking-player-info'>
+                    <div className='player-ranking-info'>
                       <span className='info-name'>Ulubiony przedmiot</span>
                       {questionGroups.find((e) => e.cid == player.favSubject)
                         ? questionGroups.find((e) => e.cid == player.favSubject).name

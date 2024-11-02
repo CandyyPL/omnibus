@@ -8,7 +8,7 @@ import { base64ToJson, jsonToBase64, stringToBase64 } from '@/helpers/base64.js'
 
 const STORAGE_QUIZ_DATA_ID = 'omnibus_quiz_data'
 
-const QUIZ_QUESTIONS_COUNT = 2
+const QUIZ_QUESTIONS_COUNT = 3
 
 const Quiz = () => {
   const {
@@ -134,6 +134,9 @@ const Quiz = () => {
       {!loading && currentQuizData ? (
         <Style.QuizWrapper>
           <h1>{quizCategory && quizCategory.name}</h1>
+          <h3>
+            Pytanie: {answers.length + 1} / {quizData.length}
+          </h3>
           <div className='question-wrapper'>
             <Style.Question>
               {currentQuizData.tags.includes('latex') ? (

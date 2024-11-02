@@ -12,6 +12,12 @@ const TopbarWrapper = styled.header`
   justify-content: space-around;
   align-items: center;
 
+  @media screen and (width >= 640px) {
+    justify-content: space-between;
+
+    padding-inline: 25px;
+  }
+
   z-index: 1;
 `
 
@@ -28,9 +34,9 @@ const Title = styled.div`
   .text {
     font-size: 34px;
     font-weight: bold;
-    color: ${({ theme }) => theme.colors.dark};
+    color: #fff;
 
-    cursor: default;
+    cursor: pointer;
 
     text-decoration: none;
   }
@@ -50,11 +56,13 @@ const TopbarButtons = styled.div`
   width: 100%;
   height: 100%;
 
-  grid-column: 3/4;
-
-  display: none; //! CHANGE
+  display: none;
   justify-content: space-evenly;
   align-items: center;
+
+  @media screen and (width >= 1280px) {
+    display: flex;
+  }
 
   button {
     height: 50px;
@@ -96,6 +104,15 @@ const Burger = styled.div`
   margin: 0;
 
   display: flex;
+
+  @media screen and (width >= 640px) {
+    grid-column: 3/4;
+    place-self: center;
+  }
+
+  @media screen and (width >= 1280px) {
+    display: none;
+  }
 
   cursor: pointer;
 

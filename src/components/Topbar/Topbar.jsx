@@ -30,7 +30,7 @@ const Topbar = ({ title = DEFAULT_TITLE, titleUrl = DEFAULT_TITLE_URL }) => {
         </span>
       </Style.Burger>
       <Style.TopbarButtons>
-        <TopbarButtons />
+        <TopbarButtons closeFunction={handleCloseMenu} />
       </Style.TopbarButtons>
     </Style.TopbarWrapper>
   )

@@ -6,7 +6,7 @@ import { supabase } from '@/supa/client.js'
 
 const LOGOUT_REDIRECT = '/'
 
-const TopbarMenu = ({ closeFunction }) => {
+const TopbarMenu = ({ closeFunction, displayType }) => {
   const { session } = useContext(AuthContext)
 
   const [error, setError] = useState('')
@@ -37,13 +37,12 @@ const TopbarMenu = ({ closeFunction }) => {
 
   return (
     <Style.ButtonsWrapper>
-      <button onClick={() => handleClick('/')}>Strona główna</button>
       {session?.user ? null : <button onClick={() => handleClick('/register')}>Rejestracja</button>}
       {session?.user ? (
         <>
           <button onClick={() => handleClick('/dashboard')}>Panel</button>
           <button onClick={() => handleClick('/ranking')}>Ranking</button>
-          <button onClick={() => handleClick('/settings')}>Ustawienia</button>
+          {/* <button onClick={() => handleClick('/settings')}>Ustawienia</button> */}
           <button onClick={() => logout()}>Wyloguj</button>
         </>
       ) : (

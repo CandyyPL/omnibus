@@ -55,6 +55,14 @@ const PlayerEntry = styled.li`
   align-items: center;
   gap: 20px;
 
+  @media screen and (width >= 1280px) {
+    height: 120px;
+
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0;
+  }
+
   border: 3px solid ${({ theme }) => theme.colors.grey};
   border-radius: 10px;
   padding: 10px;
@@ -62,7 +70,7 @@ const PlayerEntry = styled.li`
   &:first-child {
     border: 3px solid ${({ theme }) => theme.colors.yellow};
 
-    .ranking-player {
+    .player-ranking {
       background-color: ${({ theme }) => theme.colors.yellow};
     }
   }
@@ -70,12 +78,12 @@ const PlayerEntry = styled.li`
   &:nth-child(2) {
     border: 3px solid ${({ theme }) => theme.colors.blue};
 
-    .ranking-player {
+    .player-ranking {
       background-color: ${({ theme }) => theme.colors.blue};
     }
   }
 
-  .ranking-player {
+  .player-ranking {
     height: 30px;
 
     background-color: ${({ theme }) => theme.colors.grey};
@@ -96,13 +104,17 @@ const PlayerEntry = styled.li`
     width: 100%;
     height: 100%;
 
+    @media screen and (width >= 1280px) {
+      width: 75%;
+    }
+
     display: flex;
     justify-content: space-around;
     align-items: center;
 
     font-size: 16px;
 
-    .ranking-player-info {
+    .player-ranking-info {
       width: 30%;
       height: 100%;
 

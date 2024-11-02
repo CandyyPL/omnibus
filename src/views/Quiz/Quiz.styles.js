@@ -16,6 +16,11 @@ const QuizWrapper = styled.main`
     font-family: ${({ theme }) => theme.fonts.fjalla};
   }
 
+  h3 {
+    font-size: 28px;
+    font-family: ${({ theme }) => theme.fonts.fjalla};
+  }
+
   .question-wrapper {
     width: 100%;
     height: 100%;
@@ -29,6 +34,10 @@ const QuizWrapper = styled.main`
 
 const Question = styled.div`
   width: 90%;
+
+  @media screen and (width >= 1280px) {
+    max-width: 50%;
+  }
 
   margin-bottom: 20px;
 
@@ -49,7 +58,13 @@ const Answers = styled.div`
 
   button.answer {
     width: 100%;
+    max-width: 400px;
     min-height: 40px;
+
+    @media screen and (width >= 1024px) {
+      min-height: 60px;
+      max-height: 120px;
+    }
 
     background-color: #fff;
 
@@ -58,10 +73,16 @@ const Answers = styled.div`
 
     padding: 5px;
 
+    cursor: pointer;
+
     font-size: 18px;
     font-family: ${({ theme }) => theme.fonts.nunito};
     text-align: center;
     word-wrap: break-word;
+
+    &:hover {
+      background-color: #ddd;
+    }
   }
 `
 

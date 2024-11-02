@@ -10,9 +10,21 @@ const ButtonsWrapper = styled.section`
   align-items: center;
   gap: 12px;
 
+  @media screen and (width >= 1280px) {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+
   button {
     width: 200px;
     height: 60px;
+
+    @media screen and (width >= 1280px) {
+      width: 150px;
+    }
+
+    font-family: ${({ theme }) => theme.fonts.nunito};
+    color: #eee;
   }
 `
 

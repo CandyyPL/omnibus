@@ -147,7 +147,7 @@ const Dashboard = () => {
                   {userData && userData.level != undefined ? <>Poziom {userData.level}</> : null}
                 </div>
                 <div className='level-bar' ref={levelBarRef}></div>
-                <div className='games-info'>
+                <div className='player-summary-info'>
                   <div className='ov-score info-card'>
                     <span className='desc'>CAŁKOWITY WYNIK</span>
                     <span className='value'>

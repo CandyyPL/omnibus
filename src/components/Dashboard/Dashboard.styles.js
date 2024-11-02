@@ -29,6 +29,11 @@ const CategoryModal = styled.section`
     width: 80%;
     height: 400px;
 
+    @media screen and (width >= 1024px) {
+      width: 640px;
+      height: 480px;
+    }
+
     background-color: #ddd;
 
     border: 4px solid #fff;
@@ -39,6 +44,13 @@ const CategoryModal = styled.section`
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+
+    @media screen and (width >= 1024px) {
+      flex-direction: row;
+      align-items: flex-start;
+      align-content: flex-start;
+      flex-wrap: wrap;
+    }
 
     position: relative;
 
@@ -76,6 +88,10 @@ const CategoryModal = styled.section`
       width: 90%;
       height: 60px;
 
+      @media screen and (width >= 1024px) {
+        width: 150px;
+      }
+
       padding-inline: 20px;
 
       background-color: #fff;
@@ -97,102 +113,6 @@ const CategoryModal = styled.section`
     }
   }
 `
-
-// const Sidebar = styled.aside`
-//   width: 20%;
-//   height: 100%;
-
-//   background-color: #fff;
-
-//   padding: 40px 20px;
-
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: space-between;
-//   align-items: center;
-
-//   .logo {
-//     font-size: 40px;
-//     font-family: fonts.$montalt;
-//     font-weight: bold;
-//     text-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
-//   }
-
-//   ul {
-//     width: 100%;
-//     height: 40%;
-
-//     display: flex;
-//     flex-direction: column;
-//     justify-content: space-evenly;
-
-//     list-style: none;
-
-//     font-size: 32px;
-//     font-family: fonts.$nunito;
-//     font-weight: bold;
-
-//     li {
-//       cursor: pointer;
-
-//       width: fit-content;
-
-//       position: relative;
-
-//       transition: text-shadow 0.3s;
-
-//       &::before {
-//         content: '';
-
-//         width: 100%;
-//         height: 2px;
-
-//         background-color: #111;
-
-//         position: absolute;
-
-//         bottom: 0;
-//         left: 0;
-
-//         transition: transform 0.3s;
-
-//         transform: scaleX(0);
-//         transform-origin: 0%;
-//       }
-
-//       &:hover {
-//         text-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
-//       }
-
-//       &:hover::before {
-//         transform: scaleX(1);
-//       }
-//     }
-//   }
-
-//   button {
-//     width: 150px;
-//     height: 60px;
-
-//     background-color: transparent;
-
-//     border: 4px solid #111;
-
-//     font-size: 22px;
-//     font-family: fonts.$nunito;
-//     font-weight: bold;
-
-//     cursor: pointer;
-
-//     transition: all 0.2s;
-
-//     &:hover {
-//       background-color: #111;
-
-//       color: #eee;
-//     }
-//   }
-// `
 
 const MainContent = styled.main`
   width: 100%;
@@ -257,6 +177,11 @@ const MainContent = styled.main`
     padding-top: 25px;
     padding-bottom: 25px;
 
+    @media screen and (width >= 1024px) {
+      padding-top: 50px;
+      gap: 60px;
+    }
+
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -272,6 +197,10 @@ const MainContent = styled.main`
     justify-content: center;
     align-items: center;
     gap: 28px;
+
+    @media screen and (width >= 1024px) {
+      flex-direction: row;
+    }
 
     .rank-info {
       .rank-img {
@@ -300,6 +229,10 @@ const MainContent = styled.main`
     .level-info {
       width: 75%;
 
+      @media screen and (width >= 1024px) {
+        width: 50%;
+      }
+
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -313,7 +246,12 @@ const MainContent = styled.main`
 
       .level-bar {
         width: 90%;
+        max-width: 300px;
         height: 25px;
+
+        @media screen and (width >= 1280px) {
+          max-width: 700px;
+        }
 
         background-color: #aaa;
 
@@ -343,7 +281,7 @@ const MainContent = styled.main`
         }
       }
 
-      .games-info {
+      .player-summary-info {
         width: 100%;
 
         display: flex;
@@ -352,12 +290,21 @@ const MainContent = styled.main`
         align-items: center;
         gap: 12px;
 
+        @media screen and (width >= 1280px) {
+          flex-direction: row;
+        }
+
         margin-top: 20px;
         margin-bottom: 20px;
 
         .info-card {
           width: 100%;
+          max-width: 400px;
           height: 75px;
+
+          @media screen and (width >= 1280px) {
+            max-width: 250px;
+          }
 
           display: flex;
           flex-direction: column;
@@ -414,7 +361,13 @@ const MainContent = styled.main`
 
       display: flex;
       flex-direction: column;
+      justify-content: center;
+      align-items: center;
       gap: 12px;
+
+      @media screen and (width >= 1024px) {
+        flex-direction: row;
+      }
 
       .game-buttons {
         display: flex;
@@ -449,38 +402,6 @@ const MainContent = styled.main`
           }
         }
 
-        .unverified {
-          cursor: default;
-          pointer-events: none;
-
-          span {
-            width: 100%;
-            height: 100%;
-
-            background-color: #555555cc;
-
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-
-            position: absolute;
-            top: 0;
-            left: 0;
-
-            border-radius: 10px;
-
-            z-index: 10;
-
-            img {
-              height: 64px;
-            }
-
-            font-size: 18px;
-            color: #d34e68;
-          }
-        }
-
         .history {
           height: 100px;
 
@@ -494,6 +415,7 @@ const MainContent = styled.main`
 
       .last-game-info {
         width: 100%;
+        max-width: 400px;
 
         background-color: #fff;
 

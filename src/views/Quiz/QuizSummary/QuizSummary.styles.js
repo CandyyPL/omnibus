@@ -47,6 +47,12 @@ const QuizEndWrapper = styled.div`
     font-family: ${({ theme }) => theme.fonts.nunito};
     font-weight: bold;
     color: white;
+
+    cursor: pointer;
+
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.darkBlue};
+    }
   }
 `
 
@@ -55,6 +61,8 @@ const AnswersList = styled.ul`
 
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 8px;
 
   padding: 0;
@@ -63,6 +71,10 @@ const AnswersList = styled.ul`
 
 const Answer = styled.li`
   width: 100%;
+
+  @media screen and (width >= 1024px) {
+    width: 500px;
+  }
 
   background-color: #fff;
 
@@ -73,7 +85,11 @@ const Answer = styled.li`
 
   font-size: 16px;
   font-family: ${({ theme }) => theme.fonts.nunito};
-  font-weight: bold;
+  /* font-weight: bold; */
+
+  @media screen and (width >= 1024px) {
+    font-size: 20px;
+  }
 
   .question-info {
     width: 100%;
@@ -83,6 +99,8 @@ const Answer = styled.li`
     align-items: center;
 
     margin-bottom: 10px;
+
+    font-weight: bold;
   }
 
   .answer {

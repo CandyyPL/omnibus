@@ -20,6 +20,18 @@ const WelcomeContent = styled.main`
   .bus-img {
     height: 150px;
 
+    @media screen and (width >= 640px) {
+      height: 250px;
+    }
+
+    @media screen and (width >= 1024px) {
+      height: 350px;
+    }
+
+    @media screen and (width >= 1280px) {
+      height: 500px;
+    }
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -32,7 +44,6 @@ const WelcomeContent = styled.main`
 
 const CardsWrapper = styled.section`
   width: 100%;
-  height: 100%;
 
   margin-bottom: 40px;
 
@@ -41,15 +52,35 @@ const CardsWrapper = styled.section`
   align-items: center;
   gap: 40px;
 
+  @media screen and (width >= 1280px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    row-gap: 100px;
+    column-gap: 200px;
+  }
+
   .card-wrapper {
     width: 90%;
     height: 100%;
 
+    @media screen and (width >= 1280px) {
+      width: 500px;
+      height: 100%;
+
+      place-self: center;
+    }
+
     h3 {
       font-size: 28px;
+      line-height: 28px;
       font-family: ${({ theme }) => theme.fonts.fjalla};
       font-weight: bold;
       text-align: center;
+
+      @media screen and (width >= 1280px) {
+        text-align: left;
+      }
 
       margin: 0;
       margin-bottom: 12px;
@@ -58,7 +89,7 @@ const CardsWrapper = styled.section`
 
   .card {
     width: 100%;
-    height: 100%;
+    height: 80%;
 
     &.st {
       background-color: #eb4833;
@@ -108,6 +139,10 @@ const JoinWrapper = styled.section`
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
+
+  @media screen and (width >= 1280px) {
+    flex-direction: row-reverse;
+  }
 
   .join-form {
     display: flex;
@@ -209,6 +244,10 @@ const JoinWrapper = styled.section`
 
     img {
       height: 200px;
+
+      @media screen and (width >= 1280px) {
+        height: 400px;
+      }
     }
   }
 `
