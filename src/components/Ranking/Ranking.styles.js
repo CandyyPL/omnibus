@@ -9,6 +9,13 @@ const RankingWrapper = styled.main`
   justify-content: flex-start;
   align-items: center;
 
+  .ranking-heading {
+    font-size: 40px;
+    font-weight: bold;
+    font-family: ${({ theme }) => theme.fonts.fjalla};
+    text-align: center;
+  }
+
   td,
   th {
     padding: 5px;
@@ -56,7 +63,7 @@ const PlayerEntry = styled.li`
   gap: 20px;
 
   @media screen and (width >= 1280px) {
-    height: 120px;
+    height: 80px;
 
     flex-direction: row;
     justify-content: space-between;
@@ -76,10 +83,10 @@ const PlayerEntry = styled.li`
   }
 
   &:nth-child(2) {
-    border: 3px solid ${({ theme }) => theme.colors.blue};
+    border: 3px solid ${({ theme }) => theme.colors.lightBlue};
 
     .player-ranking {
-      background-color: ${({ theme }) => theme.colors.blue};
+      background-color: ${({ theme }) => theme.colors.lightBlue};
     }
   }
 
@@ -109,14 +116,16 @@ const PlayerEntry = styled.li`
     }
 
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-end;
     align-items: center;
 
     font-size: 16px;
 
     .player-ranking-info {
-      width: 30%;
+      /* width: 30%; */
       height: 100%;
+
+      padding-inline: 20px;
 
       display: flex;
       flex-direction: column;

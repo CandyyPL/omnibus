@@ -10,7 +10,7 @@ const WelcomeWrapper = styled.div`
 `
 
 const WelcomeContent = styled.main`
-  background-color: ${({ theme }) => theme.colors.light};
+  background-color: #eee;
 
   display: flex;
   flex-direction: column;

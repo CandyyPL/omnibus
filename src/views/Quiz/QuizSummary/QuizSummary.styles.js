@@ -3,7 +3,7 @@ import styled from 'styled-components'
 const QuizEndWrapper = styled.div`
   width: 100%;
 
-  background-color: ${({ theme }) => theme.colors.light};
+  background-color: #eee;
 
   display: flex;
   flex-direction: column;

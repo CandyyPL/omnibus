@@ -31,35 +31,36 @@ const Ranking = () => {
     !loading && (
       <Style.RankingWrapper>
         <Topbar title={DEFAULT_TOPBAR_TITLE} titleUrl={DEFAULT_TOPBAR_TITLE_URL} />
+        <h1 className='ranking-heading'>20 najlepszych graczy</h1>
         <Style.RankingList>
           {players.length &&
             players
               .toSorted((a, b) => Number(b.totalScore) - Number(a.totalScore))
               .map((player, idx) => (
-                <Style.PlayerEntry key={idx}>
-                  <div className='player-ranking'>
-                    <div>#{idx + 1}</div>
-                    <div>{player.username}</div>
-                    <div>Poz {player.level}</div>
-                  </div>
-                  <div className='player-info'>
-                    <div className='player-ranking-info'>
-                      <span className='info-name'>Całkowity wynik</span>
-                      {player.totalScore}
+                <>
+                  <Style.PlayerEntry key={idx}>
+                    <div className='player-ranking'>
+                      <div>#{idx + 1}</div>
+                      <div>{player.username}</div>
+                      <div>Poz {player.level}</div>
                     </div>
-                    <div className='player-ranking-info'>
-                      <span className='info-name'>Ranga</span>
-                      <img src={ranks[player.rank].img} alt='rank' />
-                      {ranks[player.rank].name}
+                    <div className='player-info'>
+                      <div className='player-ranking-info'>
+                        <span className='info-name'>Całkowity wynik</span>
+                        {player.totalScore}
+                      </div>
+                      <div className='player-ranking-info'>
+                        <span className='info-name'>Ulubiony przedmiot</span>
+                        {questionGroups.find((e) => e.cid == player.favSubject)
+                          ? questionGroups.find((e) => e.cid == player.favSubject).name
+                          : 'Brak'}
+                      </div>
+                      <div className='player-ranking-info'>
+                        <img src={ranks[player.rank].img} alt='rank' />
+                      </div>
                     </div>
-                    <div className='player-ranking-info'>
-                      <span className='info-name'>Ulubiony przedmiot</span>
-                      {questionGroups.find((e) => e.cid == player.favSubject)
-                        ? questionGroups.find((e) => e.cid == player.favSubject).name
-                        : 'Brak'}
-                    </div>
-                  </div>
-                </Style.PlayerEntry>
+                  </Style.PlayerEntry>
+                </>
               ))}
         </Style.RankingList>
       </Style.RankingWrapper>

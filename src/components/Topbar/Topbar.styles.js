@@ -233,7 +233,7 @@ const MenuWrapper = styled.div`
     font-size: 24px;
     font-family: ${({ theme }) => theme.fonts.nunito};
     /* font-weight: bold; */
-    color: ${({ theme }) => theme.colors.light};
+    color: #eee;
 
     cursor: pointer;
 

@@ -4,7 +4,7 @@ const QuizWrapper = styled.main`
   width: 100%;
   height: 100vh;
 
-  background-color: ${({ theme }) => theme.colors.light};
+  background-color: #eee;
 
   display: flex;
   flex-direction: column;
