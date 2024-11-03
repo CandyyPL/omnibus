@@ -7,110 +7,35 @@ const DashboardWrapper = styled.div`
   flex-direction: column;
 `
 
-const CategoryModal = styled.section`
-  .category-modal-bg {
-    width: 100vw;
-    height: 100vh;
+const Subject = styled.div`
+  width: 90%;
+  height: 60px;
 
-    position: fixed;
-    z-index: 10;
-
-    top: 0;
-    left: 0;
-
-    background-color: #eeeeee88;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  @media screen and (width >= 1024px) {
+    width: 150px;
   }
 
-  .category-modal {
-    width: 80%;
-    height: 400px;
+  background-color: #fff;
 
-    @media screen and (width >= 1024px) {
-      width: 640px;
-      height: 480px;
-    }
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    background-color: #ddd;
+  border: 2px solid #111;
+  margin: 10px;
+  padding-inline: 20px;
 
-    border: 4px solid #fff;
-    border-radius: 15px;
-    padding: 25px;
+  font-size: 18px;
+  font-family: ${({ theme }) => theme.fonts.nunito};
+  font-weight: normal;
+  text-align: center;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
+  cursor: pointer;
 
-    @media screen and (width >= 1024px) {
-      flex-direction: row;
-      align-items: flex-start;
-      align-content: flex-start;
-      flex-wrap: wrap;
-    }
+  transition: background-color 0.2s;
 
-    position: relative;
-
-    .modal-close {
-      width: 25px;
-      height: 25px;
-
-      position: absolute;
-      top: 8px;
-      right: 8px;
-
-      background-color: #fff;
-
-      border: none;
-      border-radius: 5px;
-
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      cursor: pointer;
-
-      transition: background-color 0.2s;
-
-      &:hover {
-        background-color: #bbb;
-      }
-
-      img {
-        height: 60%;
-      }
-    }
-
-    .modal-subject {
-      width: 90%;
-      height: 60px;
-
-      @media screen and (width >= 1024px) {
-        width: 150px;
-      }
-
-      padding-inline: 20px;
-
-      background-color: #fff;
-
-      border: 2px solid #111;
-      margin: 10px;
-
-      font-size: 18px;
-      font-family: fonts.$nunito;
-      font-weight: normal;
-
-      cursor: pointer;
-
-      transition: background-color 0.2s;
-
-      &:hover {
-        background-color: #bbb;
-      }
-    }
+  &:hover {
+    background-color: #bbb;
   }
 `
 
@@ -231,6 +156,7 @@ const MainContent = styled.main`
 
       @media screen and (width >= 1024px) {
         width: 50%;
+        gap: 28px;
       }
 
       display: flex;
@@ -367,6 +293,7 @@ const MainContent = styled.main`
 
       @media screen and (width >= 1024px) {
         flex-direction: row;
+        gap: 40px;
       }
 
       .game-buttons {
@@ -567,7 +494,6 @@ const MainContent = styled.main`
 
 export default {
   DashboardWrapper,
-  CategoryModal,
-  // Sidebar,
+  Subject,
   MainContent,
 }

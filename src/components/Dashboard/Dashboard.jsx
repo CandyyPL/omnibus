@@ -3,8 +3,8 @@ import { QuizDataContext } from '@/providers/QuizDataProvider'
 import { AuthContext } from '@/providers/AuthProvider'
 import { stringToBase64 } from '@/helpers/base64.js'
 import Topbar from '@/components/Topbar/Topbar.jsx'
+import Modal from '@/components/Modal/Modal.jsx'
 import { useNavigate } from 'react-router-dom'
-import closeImg from '@/assets/img/close.png'
 import Style from './Dashboard.styles.js'
 import { supabase } from '@/supa/client'
 import ranks from '@/helpers/ranks'
@@ -97,28 +97,22 @@ const Dashboard = () => {
     navigate('/quiz')
   }
 
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+  }
+
   return (
     !loading && (
       <Style.DashboardWrapper>
         <Topbar title={DEFAULT_TOPBAR_TITLE} titleUrl={DEFAULT_TOPBAR_TITLE_URL} />
         {isModalOpen && (
-          <Style.CategoryModal>
-            <div className='category-modal-bg'>
-              <div className='category-modal'>
-                <button className='modal-close' onClick={() => setIsModalOpen(false)}>
-                  <img src={closeImg} alt='close' />
-                </button>
-                {questionGroups.map((category) => (
-                  <button
-                    className='modal-subject'
-                    key={category.id}
-                    onClick={() => initQuiz(category)}>
-                    {category.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </Style.CategoryModal>
+          <Modal closeFunction={handleCloseModal}>
+            {questionGroups.map((category) => (
+              <Style.Subject key={category.id} onClick={() => initQuiz(category)}>
+                {category.name}
+              </Style.Subject>
+            ))}
+          </Modal>
         )}
         <Style.MainContent>
           {isInfoVisible && (

@@ -14,11 +14,20 @@ const QuizWrapper = styled.main`
   h1 {
     font-size: 32px;
     font-family: ${({ theme }) => theme.fonts.fjalla};
+
+    @media screen and (width >= 640px) {
+      font-size: 42px;
+    }
+
+    @media screen and (width >= 1280px) {
+      font-size: 50px;
+    }
   }
 
   h3 {
     font-size: 28px;
-    font-family: ${({ theme }) => theme.fonts.fjalla};
+    font-family: ${({ theme }) => theme.fonts.nunito};
+    font-weight: normal;
   }
 
   .question-wrapper {

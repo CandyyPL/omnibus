@@ -15,15 +15,27 @@ const QuizEndWrapper = styled.div`
   h1,
   h2,
   h3 {
-    font-family: ${({ theme }) => theme.fonts.fjalla};
-    font-weight: bold;
-
     margin: 0;
     margin-bottom: 20px;
   }
 
   h1 {
     font-size: 28px;
+    font-family: ${({ theme }) => theme.fonts.fjalla};
+    font-weight: bold;
+
+    @media screen and (width >= 640px) {
+      font-size: 42px;
+    }
+
+    @media screen and (width >= 1280px) {
+      font-size: 50px;
+    }
+  }
+
+  h2,
+  h3 {
+    font-family: ${({ theme }) => theme.fonts.nunito};
   }
 
   h2 {

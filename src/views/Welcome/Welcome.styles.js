@@ -142,6 +142,7 @@ const JoinWrapper = styled.section`
 
   @media screen and (width >= 1280px) {
     flex-direction: row-reverse;
+    gap: 100px;
   }
 
   .join-form {
